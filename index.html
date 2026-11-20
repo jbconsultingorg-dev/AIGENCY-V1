@@ -1,0 +1,3318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="carbon">
+  <title>AI Growth &amp; Automation Studio B2B — Consola Maestra de los 10 Módulos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Carbon) */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts */
+      --font-headline: 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+      --indicator-strong: 3px solid var(--primary);
+      --alert-bar-error: 3px solid var(--error);
+      --alert-bar-positive: 3px solid var(--tertiary);
+      --alert-bar-warning: 3px solid var(--warning);
+
+      /* Shared semantic tokens */
+      --positive: #198038;
+      --positive-container: #defbe6;
+      --warning: #b28600;
+      --warning-container: #fcf4d6;
+      --error-container: #fff1f1;
+      --focus: var(--primary);
+
+      /* Type scale (Dashboard / Data Explorer) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Page Grid */
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Typography helpers */
+    .mono-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--on-surface-variant);
+      display: block;
+    }
+    .headline-display {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 300;
+      line-height: 1.18;
+      letter-spacing: 0;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .headline-display strong { font-weight: 600; }
+    .headline-section {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 300;
+      line-height: 1.25;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .headline-section strong { font-weight: 600; }
+    .subhead {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .body-copy {
+      max-width: 68ch;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .helper-text {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .key-value {
+      font-family: var(--font-label);
+      font-weight: 300;
+      font-size: clamp(1.5rem, 1.2rem + 1vw, 2.125rem);
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0;
+    }
+
+    /* Header / Masthead */
+    .studio-header {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-lg);
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: end;
+    }
+    .header-meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      align-items: stretch;
+    }
+    .search-wrapper {
+      position: relative;
+    }
+    .field-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: block;
+      margin-bottom: var(--space-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .carbon-input, .carbon-select {
+      width: 100%;
+      height: 44px;
+      background: var(--surface-container-low);
+      border: 0;
+      border-bottom: var(--field-rule);
+      border-radius: 0;
+      padding: 0 var(--space-md);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .carbon-select {
+      padding-right: var(--space-xl);
+    }
+    .carbon-input:hover, .carbon-select:hover {
+      background: var(--surface-container-high);
+    }
+    .carbon-input:focus-visible, .carbon-select:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: -2px;
+    }
+    .search-results-popover {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--background);
+      border: var(--rule);
+      box-shadow: var(--shadow-2);
+      z-index: 40;
+      max-height: 340px;
+      overflow-y: auto;
+      display: none;
+    }
+    .search-results-popover.open { display: block; }
+    .search-hit {
+      width: 100%;
+      text-align: left;
+      background: var(--background);
+      border: 0;
+      border-bottom: var(--rule);
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-height: 44px;
+    }
+    .search-hit:hover { background: var(--surface-container); }
+
+    .header-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: flex-end;
+    }
+
+    /* Buttons (Carbon) */
+    .btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg) var(--space-sm) var(--space-md);
+      border-radius: 0;
+      font-size: 0.875rem;
+      font-weight: 400;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      border: 1px solid transparent;
+      text-align: left;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background: color-mix(in srgb, var(--primary), var(--on-surface) 25%);
+    }
+    .btn-secondary {
+      background: transparent;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .btn-secondary:hover {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .btn-ghost:hover {
+      background: var(--surface-container);
+    }
+    .btn-danger-ghost {
+      background: transparent;
+      color: var(--error);
+      border-color: var(--outline-variant);
+    }
+    .btn-danger-ghost:hover {
+      background: var(--error-container);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Tags & Status badges */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 24px;
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded-full);
+      font-size: var(--label-size);
+      font-weight: 400;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      white-space: nowrap;
+    }
+    .tag-neutral {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .tag-positive {
+      background: var(--positive-container);
+      color: var(--on-surface);
+    }
+    .tag-warning {
+      background: var(--warning-container);
+      color: var(--on-surface);
+    }
+    .tag-error {
+      background: var(--error-container);
+      color: var(--error);
+    }
+
+    /* 10-Module Tabs Bar */
+    .tabs-shell {
+      border-bottom: var(--rule);
+    }
+    .tabs-bar {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0;
+      border-top: var(--rule);
+      border-left: var(--rule);
+    }
+    .tab-btn {
+      background: var(--background);
+      border: 0;
+      border-right: var(--rule);
+      border-bottom: var(--rule);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 54px;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      color: var(--on-surface-variant);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+      position: relative;
+    }
+    .tab-btn:hover {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .tab-btn.is-active {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 600;
+      box-shadow: inset 0 -3px 0 var(--primary);
+    }
+    .tab-num {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+    }
+    .tab-btn.is-active .tab-num {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .tab-title {
+      font-size: 0.875rem;
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Tab Panels */
+    .tab-panel {
+      display: none;
+      flex-direction: column;
+      gap: var(--space-xl);
+      animation: panelFade var(--dur-short) var(--ease-out);
+    }
+    .tab-panel.is-active {
+      display: flex;
+    }
+    @keyframes panelFade {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Carbon Layers & Grid Structures */
+    .layer {
+      background: var(--surface-container);
+      border-radius: 0;
+      padding: var(--space-md);
+    }
+    .layer .layer {
+      background: var(--surface-container-high);
+    }
+    .key-tile {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-bottom: var(--indicator);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .tile {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .section-head {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+
+    /* Grids */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .asymmetric-8-4 {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .asymmetric-4-8 {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .split-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    /* Hairline list */
+    .rule-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .rule-list > li {
+      padding: var(--space-sm) 0;
+    }
+    .rule-list > li + li {
+      border-top: var(--rule);
+    }
+
+    /* Notifications / Callout Strips */
+    .callout {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-left: var(--indicator-strong);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .callout.is-positive { border-left-color: var(--tertiary); }
+    .callout.is-error { border-left-color: var(--error); }
+    .callout.is-warning { border-left-color: var(--warning); }
+
+    /* Tables (Carbon) */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border-bottom: var(--rule);
+    }
+    table.carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    table.carbon-table thead th {
+      background: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface);
+      padding: var(--space-sm) var(--space-md);
+      white-space: nowrap;
+    }
+    table.carbon-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-top: var(--rule);
+      vertical-align: top;
+      color: var(--on-surface);
+    }
+    table.carbon-table tbody tr:nth-child(even) {
+      background: var(--surface-container-low);
+    }
+    table.carbon-table tbody tr.is-selected {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    table.carbon-table .num {
+      text-align: right;
+      font-family: var(--font-label);
+      white-space: nowrap;
+    }
+
+    /* Sub-tabs / Segmented pills (square Carbon controls) */
+    .subnav-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: end;
+    }
+    .seg-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: var(--surface-container);
+      border: 0;
+      border-bottom: 2px solid transparent;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      font-size: 0.875rem;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .seg-btn:hover {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .seg-btn.is-active {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom-color: var(--primary);
+    }
+
+    /* Interactive Checklists */
+    .check-row {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      gap: var(--space-sm);
+      align-items: start;
+      padding: var(--space-sm) 0;
+      border-top: var(--rule);
+    }
+    .check-row:first-child { border-top: 0; }
+    .check-box {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+      margin-top: 2px;
+      cursor: pointer;
+    }
+    .check-row.is-done .check-text {
+      text-decoration: line-through;
+      color: var(--on-surface-variant);
+    }
+
+    /* Range sliders */
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .slider-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 110px;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      height: 44px;
+      cursor: pointer;
+    }
+
+    /* Charts */
+    .chart-box {
+      position: relative;
+      min-height: 320px;
+      height: 320px;
+      width: 100%;
+    }
+
+    /* Risk Heatmap 3x3 */
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: 90px repeat(3, minmax(0, 1fr));
+      gap: 2px;
+      background: var(--outline-variant);
+      border: var(--rule);
+    }
+    .hm-head, .hm-axis {
+      background: var(--surface-container-high);
+      padding: var(--space-sm);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .hm-cell {
+      background: var(--background);
+      padding: var(--space-sm);
+      min-height: 76px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-content: start;
+    }
+    .hm-cell.hm-high { background: var(--error-container); }
+    .hm-cell.hm-med { background: var(--warning-container); }
+    .hm-pill {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border: 1px solid var(--on-surface);
+      background: var(--background);
+      color: var(--on-surface);
+      cursor: pointer;
+      min-height: 28px;
+    }
+    .hm-pill.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    /* Architecture Diagram SVG wrapper */
+    .svg-schematic {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: var(--surface-container);
+      border: var(--rule);
+    }
+
+    /* Footer nav between tabs */
+    .panel-footer-nav {
+      border-top: var(--rule);
+      padding-top: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    /* Inline status toast */
+    .inline-status {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--tertiary);
+      min-height: 1.2em;
+    }
+
+    /* Container queries */
+    .card-wrapper { container-type: inline-size; }
+    @container (max-width: 420px) {
+      .split-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Mobile breakpoint */
+    @media (max-width: 960px) {
+      .tabs-bar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .studio-header,
+      .asymmetric-8-4,
+      .asymmetric-4-8,
+      .split-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .tabs-bar {
+        grid-template-columns: 1fr;
+      }
+      .heatmap-grid {
+        grid-template-columns: 64px repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <!-- HEADER -->
+    <header class="studio-header">
+      <div>
+        <div class="header-meta-strip">
+          <span class="mono-label">Master Plan Corporativo · Versión 1.0 · Noviembre 2026</span>
+          <span class="tag" id="header-brand-badge">Marca Proxy en Definición</span>
+          <span class="tag tag-positive" id="header-progress-badge">0 / 16 acciones P0–P1</span>
+        </div>
+        <h1 class="headline-display"><strong>AI Growth &amp; Automation Studio B2B</strong> — Consola Maestra de los 10 Módulos</h1>
+        <p class="helper-text" style="margin-top: var(--space-sm);">
+          Arquitectura institucional, modelo de negocio AS-IS ➔ TO-BE, catálogo de 3 packs estandarizados, finanzas, playbook comercial, operaciones, gobierno horizontal, riesgos y tablero ejecutivo.
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <label class="field-label" for="global-search">Buscar en los 10 documentos</label>
+          <input
+            type="search"
+            id="global-search"
+            class="carbon-input"
+            placeholder="Ej.: Retainer, RAG, Chochi, AS-IS, R05, n8n…"
+            oninput="handleGlobalSearch(this.value)"
+            onfocus="handleGlobalSearch(this.value)"
+          >
+          <div id="search-results" class="search-results-popover" role="listbox" aria-label="Resultados de búsqueda"></div>
+        </div>
+        <div class="header-btn-row">
+          <button type="button" class="btn btn-secondary" onclick="exportSummaryCsv()">
+            <i data-lucide="download" aria-hidden="true" style="width:16px;height:16px;"></i>
+            <span>Exportar Resumen CSV</span>
+          </button>
+          <button type="button" class="btn btn-danger-ghost" id="btn-reset-all" onclick="resetWorkspaceState(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true" style="width:16px;height:16px;"></i>
+            <span>Reiniciar Cambios</span>
+          </button>
+        </div>
+        <div class="inline-status" id="save-status" aria-live="polite"></div>
+      </div>
+    </header>
+
+    <!-- 10-TAB NAVIGATION -->
+    <nav class="tabs-shell" aria-label="Módulos del Master Plan">
+      <div class="tabs-bar" role="tablist" id="main-tablist">
+        <button type="button" role="tab" class="tab-btn is-active" id="tab-01" aria-selected="true" aria-controls="panel-01" onclick="activateTab('01')">
+          <span class="tab-num">01 / CONSTITUCIÓN</span>
+          <span class="tab-title">Constitución Empresarial IA</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-02" aria-selected="false" aria-controls="panel-02" onclick="activateTab('02')">
+          <span class="tab-num">02 / NEGOCIO</span>
+          <span class="tab-title">Master Business Plan</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-03" aria-selected="false" aria-controls="panel-03" onclick="activateTab('03')">
+          <span class="tab-num">03 / PROYECTO</span>
+          <span class="tab-title">Master Project Plan</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-04" aria-selected="false" aria-controls="panel-04" onclick="activateTab('04')">
+          <span class="tab-num">04 / PRODUCTO Y TECH</span>
+          <span class="tab-title">Product &amp; Technology</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-05" aria-selected="false" aria-controls="panel-05" onclick="activateTab('05')">
+          <span class="tab-num">05 / FINANZAS</span>
+          <span class="tab-title">Financial Model</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-06" aria-selected="false" aria-controls="panel-06" onclick="activateTab('06')">
+          <span class="tab-num">06 / COMERCIAL</span>
+          <span class="tab-title">Sales &amp; Marketing Playbook</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-07" aria-selected="false" aria-controls="panel-07" onclick="activateTab('07')">
+          <span class="tab-num">07 / OPERACIONES</span>
+          <span class="tab-title">Operations Manual</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-08" aria-selected="false" aria-controls="panel-08" onclick="activateTab('08')">
+          <span class="tab-num">08 / GOBIERNO</span>
+          <span class="tab-title">People &amp; Governance</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-09" aria-selected="false" aria-controls="panel-09" onclick="activateTab('09')">
+          <span class="tab-num">09 / RIESGOS</span>
+          <span class="tab-title">Decision &amp; Risk Log</span>
+        </button>
+        <button type="button" role="tab" class="tab-btn" id="tab-10" aria-selected="false" aria-controls="panel-10" onclick="activateTab('10')">
+          <span class="tab-num">10 / TABLERO</span>
+          <span class="tab-title">Executive Dashboard</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 01: CONSTITUCIÓN EMPRESARIAL IA                               -->
+    <!-- =================================================================== -->
+    <section id="panel-01" class="tab-panel is-active" role="tabpanel" aria-labelledby="tab-01">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 01 · Marco Institucional y Dirección</span>
+          <h2 class="headline-section"><strong>Constitución Corporativa</strong> — Identidad, North Star y Líneas Rojas</h2>
+        </div>
+        <span class="tag">Estado: Aprobado</span>
+      </div>
+
+      <!-- KPIs clave de constitución -->
+      <div class="kpi-grid">
+        <div class="key-tile">
+          <span class="mono-label">Posicionamiento Año 1</span>
+          <div class="key-value">AI Growth Studio</div>
+          <p class="helper-text">Soluciones enlatadas customizables (AS-IS ➔ TO-BE)</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Capital de Trabajo Fase 0</span>
+          <div class="key-value">USD 1.500</div>
+          <p class="helper-text">Dominios, APIs, cloud y prospección</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Piso Mínimo Retainer</span>
+          <div class="key-value">USD 1.000<span style="font-size:1rem;">/mes</span></div>
+          <p class="helper-text">Línea roja innegociable por cliente + Setup Upfront</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Estructura Societaria</span>
+          <div class="key-value">3 Co-Fundadores</div>
+          <p class="helper-text">Igualdad horizontal y marca blanca Proxy</p>
+        </div>
+      </div>
+
+      <!-- Misión, Visión, Foco + Evaluador North Star -->
+      <div class="asymmetric-8-4">
+        <div class="layer" style="display:flex;flex-direction:column;gap:var(--space-md);">
+          <div>
+            <span class="mono-label">1.1 Posicionamiento &amp; Enfoque de Soluciones</span>
+            <h3 class="subhead" style="margin-top:var(--space-xs);">Brindar soluciones de negocio, no tecnología vacía</h3>
+            <p class="body-copy" style="margin-top:var(--space-xs);">
+              La compañía opera durante su primer año como un <strong>AI Growth &amp; Automation Studio B2B</strong>. Se descarta explícitamente vender horas de desarrollo tradicional, chatbots genéricos o consultoría teórica. Cada intervención parte de relevar el estado actual (<strong>AS-IS</strong>) para diseñar y desplegar un estado optimizado (<strong>TO-BE</strong>) orientado a <strong>aumentar ingresos, bajar costos y elevar la eficiencia operativa</strong>.
+            </p>
+          </div>
+          <div class="split-2">
+            <div class="layer">
+              <span class="mono-label">Misión</span>
+              <p class="helper-text" style="color:var(--on-surface);margin-top:var(--space-xs);">
+                Transformar la capacidad comercial y la eficiencia de procesos en empresas B2B mediante soluciones agénticas de IA y automatización, entregando un ROI claro y medible desde el primer mes.
+              </p>
+            </div>
+            <div class="layer">
+              <span class="mono-label">Visión</span>
+              <p class="helper-text" style="color:var(--on-surface);margin-top:var(--space-xs);">
+                Consolidarnos como estudio referente en soluciones agénticas B2B en la región, reconocido por la estandarización de activos tecnológicos, rapidez de entrega e ingresos recurrentes sostenibles.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout is-error">
+            <span class="mono-label" style="color:var(--error);">Líneas Rojas Innegociables (Criterios de Rechazo)</span>
+            <ul class="rule-list">
+              <li><strong>1. Cero Software Custom Tradicional:</strong> Rechazo explícito a desarrollos web o software a medida que no usen los componentes agénticos/IA estandarizados.</li>
+              <li><strong>2. Piso Económico Innegociable:</strong> Ningún contrato se aprueba por debajo del esquema <em>Upfront Implementation Fee</em> + <em>Monthly Retainer</em> mínimo de <strong>USD 1.000/mes</strong>.</li>
+              <li><strong>3. Protección de Ancho de Banda:</strong> No aceptar proyectos en Fase 1 que exijan integraciones complejas con sistemas legados obsoletos sin API documentada.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Simulador de Filtro North Star -->
+        <div class="layer" style="border-top: var(--indicator);">
+          <span class="mono-label">Simulador de Decisión · Pregunta North Star</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);">Filtro de Aprobación de Iniciativas</h3>
+          <p class="helper-text" style="margin-top:var(--space-xs);">
+            “¿Esta decisión nos acerca a construir una empresa más rentable, escalable, estandarizada y autónoma, que ayude al cliente a aumentar ingresos, bajar costos o elevar eficiencia sin comprometer nuestro ancho de banda?”
+          </p>
+          <div style="margin-top:var(--space-md);display:flex;flex-direction:column;gap:var(--space-sm);">
+            <label style="display:flex;gap:var(--space-sm);align-items:center;cursor:pointer;min-height:44px;">
+              <input type="checkbox" class="check-box" id="ns-roi" checked onchange="evaluateNorthStar()">
+              <span>Impacta en ingresos, costos o eficiencia del cliente (AS-IS ➔ TO-BE)</span>
+            </label>
+            <label style="display:flex;gap:var(--space-sm);align-items:center;cursor:pointer;min-height:44px;">
+              <input type="checkbox" class="check-box" id="ns-pack" checked onchange="evaluateNorthStar()">
+              <span>Usa arquitectura estandarizada (≥80% reutilizable de Packs 1–3)</span>
+            </label>
+            <label style="display:flex;gap:var(--space-sm);align-items:center;cursor:pointer;min-height:44px;">
+              <input type="checkbox" class="check-box" id="ns-price" checked onchange="evaluateNorthStar()">
+              <span>Respeta Upfront Setup + Retainer ≥ USD 1.000/mes</span>
+            </label>
+            <label style="display:flex;gap:var(--space-sm);align-items:center;cursor:pointer;min-height:44px;">
+              <input type="checkbox" class="check-box" id="ns-bandwidth" checked onchange="evaluateNorthStar()">
+              <span>Protege ancho de banda (Setup &lt; 10 días, con APIs disponibles)</span>
+            </label>
+          </div>
+          <div id="ns-verdict" class="callout is-positive" style="margin-top:var(--space-md);">
+            <strong id="ns-verdict-title">APROBADO — Alineado con la North Star</strong>
+            <span id="ns-verdict-desc" class="helper-text">La iniciativa cumple las 4 reglas constitucionales y puede avanzar a propuesta comercial.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gobernanza Proxy y Equipo -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Gobernanza Horizontal, Modelo Proxy y Equipo Inicial</h3>
+          <span class="mono-label">Cero jerarquías verticales</span>
+        </div>
+        <div class="card-grid" style="margin-top:var(--space-md);">
+          <div class="tile">
+            <span class="mono-label">Co-Fundador 1 · Dedicación Parcial</span>
+            <h4 class="subhead">Strategy, Finance &amp; Operations</h4>
+            <p class="helper-text" style="color:var(--on-surface);">CFO, CPO, unit economics, pricing y diseño de procesos. Operación 100% interna bajo <strong>Marca Proxy</strong> resguardando visibilidad pública por restricciones contractuales previas.</p>
+          </div>
+          <div class="tile">
+            <span class="mono-label">Co-Fundador 2 · Dedicación Parcial</span>
+            <h4 class="subhead">Felipe — CTO &amp; Technical Lead</h4>
+            <p class="helper-text" style="color:var(--on-surface);">Arquitectura tecnológica, automatizaciones en n8n, backend, QA técnico, desarrollo de Sandbox Demos y soporte en demos técnicas de venta.</p>
+          </div>
+          <div class="tile">
+            <span class="mono-label">Co-Fundador 3 · Mayor Dedicación</span>
+            <h4 class="subhead">Ile — Commercial &amp; CS Lead</h4>
+            <p class="helper-text" style="color:var(--on-surface);">Cara visible de la marca en CABA/GBA, prospección outbound, discovery calls (relevamiento AS-IS), onboarding y retención de cuentas (MRR).</p>
+          </div>
+          <div class="tile">
+            <span class="mono-label">Colaborador On-Demand · Sin Equity</span>
+            <h4 class="subhead">Chochi — Technical Contractor</h4>
+            <p class="helper-text" style="color:var(--on-surface);">Desarrollo especializado e integraciones complejas por proyecto u hora puntual en picos de demanda (imputado como COGS del proyecto).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explorador de Naming -->
+      <div>
+        <div class="section-head">
+          <div>
+            <h3 class="subhead">Explorador y Selección de Naming Corporativo (Acción P0)</h3>
+            <p class="helper-text">Opciones evaluadas para reemplazar el nombre tentativo previo, clasificadas por enfoque estratégico. Seleccioná una marca candidata para fijarla en la consola.</p>
+          </div>
+          <div class="subnav-row">
+            <button type="button" class="seg-btn is-active" onclick="filterNames('all', this)">Todas (10)</button>
+            <button type="button" class="seg-btn" onclick="filterNames('agentic', this)">Agentic &amp; AI</button>
+            <button type="button" class="seg-btn" onclick="filterNames('growth', this)">Growth &amp; ROI</button>
+            <button type="button" class="seg-btn" onclick="filterNames('abstract', this)">Neologismos</button>
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:var(--space-md);">
+          <table class="carbon-table" id="naming-table">
+            <thead>
+              <tr>
+                <th>Marca Candidata</th>
+                <th>Enfoque</th>
+                <th>Pitch / Posicionamiento</th>
+                <th>Dominios Sugeridos</th>
+                <th class="num">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="naming-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <span class="mono-label">Fin Módulo 01 · Constitución Empresarial IA</span>
+        <button type="button" class="btn btn-primary" onclick="activateTab('02')">
+          <span>Siguiente: 02 Master Business Plan</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 02: MASTER BUSINESS PLAN                                      -->
+    <!-- =================================================================== -->
+    <section id="panel-02" class="tab-panel" role="tabpanel" aria-labelledby="tab-02">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 02 · Tesis de Negocio, Mercado y Estrategia</span>
+          <h2 class="headline-section"><strong>Master Business Plan</strong> — Propuesta AS-IS ➔ TO-BE y Ventaja Competitiva</h2>
+        </div>
+        <span class="tag">Foco: B2B LATAM &amp; Argentina</span>
+      </div>
+
+      <!-- Tesis + Vacío de mercado -->
+      <div class="asymmetric-8-4">
+        <div class="layer" style="display:flex;flex-direction:column;gap:var(--space-md);">
+          <span class="mono-label">2.1 Oportunidad de Mercado (El Vacío Estratégico)</span>
+          <h3 class="subhead">Entre el freelancer desconectado y la consultora Enterprise inaccesible</h3>
+          <p class="body-copy">
+            El mercado regional presenta dos extremos ineficientes: por un lado, agencias y freelancers que venden horas o chatbots simples desacoplados del CRM y de los objetivos comerciales; por el otro, consultoras Enterprise (Big 4 / Software Houses) que cobran más de <strong>USD 50.000</strong> y demoran de 3 a 6 meses. Nuestro Studio ocupa el centro de alto valor: <strong>soluciones empaquetadas de alto ROI implementadas en 1 a 3 semanas</strong> con ticket accesible.
+          </p>
+          <!-- Comparador interactivo AS-IS vs TO-BE -->
+          <div>
+            <div class="subnav-row" style="margin-bottom:var(--space-sm);">
+              <button type="button" class="seg-btn is-active" onclick="toggleAsIsToBe('both', this)">Comparativa AS-IS ➔ TO-BE</button>
+              <button type="button" class="seg-btn" onclick="toggleAsIsToBe('asis', this)">Solo Estado AS-IS (Dolor)</button>
+              <button type="button" class="seg-btn" onclick="toggleAsIsToBe('tobe', this)">Solo Estado TO-BE (Solución)</button>
+            </div>
+            <div class="split-2" id="asis-tobe-grid">
+              <div class="callout is-error" id="col-asis">
+                <span class="mono-label" style="color:var(--error);">Estado AS-IS (Problema del Cliente)</span>
+                <ul class="rule-list">
+                  <li>Fuga de prospectos cualificados por demoras &gt; 15 min o consultas fuera de horario.</li>
+                  <li>Comerciales perdiendo 60%–70% del tiempo en prospección manual y tareas administrativas.</li>
+                  <li>Falta de trazabilidad en el pipeline y cuellos de botella en backoffice documental.</li>
+                </ul>
+              </div>
+              <div class="callout is-positive" id="col-tobe">
+                <span class="mono-label" style="color:var(--tertiary);">Estado TO-BE (Solución Desplegada)</span>
+                <ul class="rule-list">
+                  <li>Atención agéntica 24/7 con respuesta en menos de <strong>5 segundos</strong> y calificación BANT.</li>
+                  <li>Agenda comercial nutrida automáticamente con reuniones cualificadas sin subir costo fijo.</li>
+                  <li>Base RAG interna y flujos n8n que reducen hasta 60% las horas-hombre operativas.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ICP Card -->
+        <div class="layer" style="border-top: var(--indicator);">
+          <span class="mono-label">2.2 Perfil de Cliente Ideal (ICP)</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);">Target B2B Prioritario</h3>
+          <ul class="rule-list" style="margin-top:var(--space-sm);">
+            <li><strong>Sectores:</strong> Consultoras corporativas, firmas B2B, mayoristas/distribuidoras, logística, firmas legales/financieras de ticket medio-alto.</li>
+            <li><strong>Tamaño:</strong> Empresas de 10 a 150 empleados con equipos comerciales de 3 a 20 vendedores.</li>
+            <li><strong>Geografía Año 1:</strong> CABA, GBA, Argentina y expansión regional LATAM.</li>
+            <li><strong>Nota Estratégica:</strong> El mapa de nichos verticales específicos permanece abierto para definición comercial posterior, priorizando ROI inmediato.</li>
+          </ul>
+          <div class="layer" style="margin-top:var(--space-md);">
+            <span class="mono-label">Ecuación Obligatoria de ROI</span>
+            <p style="font-family:var(--font-label);font-size:0.8125rem;margin:var(--space-xs) 0 0 0;">
+              ROI = (Ingresos por Nuevas Ventas + Ahorro Horas/Hombre) ÷ (Setup Fee + Monthly Retainer)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Catálogo Resumido de Packs -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Catálogo Estandarizado Año 1 (3 Paquetes Base Customizables)</h3>
+          <span class="mono-label">80% modular / 20% customización TO-BE</span>
+        </div>
+        <div class="card-grid" style="margin-top:var(--space-md);">
+          <div class="key-tile">
+            <span class="mono-label">Pack 01 · Conversión 24/7</span>
+            <h4 class="subhead">Smart Sales &amp; Conversational Agent</h4>
+            <p class="helper-text" style="color:var(--on-surface);">Agente IA en WhatsApp Business, Web y CRM que califica leads en tiempo real y agenda citas en Google Calendar / Calendly / HubSpot.</p>
+            <div style="margin-top:var(--space-sm);display:flex;flex-wrap:wrap;gap:var(--space-xs);">
+              <span class="tag">&lt; 5 seg respuesta</span>
+              <span class="tag tag-positive">+30% agendamiento</span>
+            </div>
+          </div>
+          <div class="key-tile">
+            <span class="mono-label">Pack 02 · Prospección Outbound</span>
+            <h4 class="subhead">B2B Lead Engine &amp; Growth Pipeline</h4>
+            <p class="helper-text" style="color:var(--on-surface);">Enriquecimiento de cuentas ABM y secuencias multicanal (LinkedIn + Email) personalizadas por IA con agente que califica respuestas entrantes.</p>
+            <div style="margin-top:var(--space-sm);display:flex;flex-wrap:wrap;gap:var(--space-xs);">
+              <span class="tag">15–30 reuniones/mes</span>
+              <span class="tag tag-positive">3x Reply Rate</span>
+            </div>
+          </div>
+          <div class="key-tile">
+            <span class="mono-label">Pack 03 · Backoffice &amp; RAG</span>
+            <h4 class="subhead">Enterprise Knowledge RAG Hub</h4>
+            <p class="helper-text" style="color:var(--on-surface);">Base de conocimiento privada (pgvector/Supabase) sobre PDFs, manuales y catálogos para soporte L1/L2 y consultas internas repetitivas.</p>
+            <div style="margin-top:var(--space-sm);display:flex;flex-wrap:wrap;gap:var(--space-xs);">
+              <span class="tag">-60% horas soporte</span>
+              <span class="tag tag-positive">80% tareas automatizadas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matriz Competitiva -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Matriz Competitiva y Posicionamiento</h3>
+          <span class="mono-label">Ventaja en velocidad, foco comercial y recurrencia</span>
+        </div>
+        <div class="table-wrap" style="margin-top:var(--space-md);">
+          <table class="carbon-table">
+            <thead>
+              <tr>
+                <th>Criterio de Evaluación</th>
+                <th>Agencias Tradicionales / Freelancers</th>
+                <th>Software Custom (Dev / Big 4)</th>
+                <th>Nuestro Studio B2B</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Enfoque en ROI y Ventas</strong></td>
+                <td>Bajo (entregan piezas aisladas)</td>
+                <td>Medio</td>
+                <td><strong>ALTO (Núcleo AS-IS ➔ TO-BE)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Tiempo de Implementación</strong></td>
+                <td>1 – 2 semanas</td>
+                <td>3 – 6 meses</td>
+                <td><strong>1 – 3 semanas (&lt;10 días hábiles meta)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Costo de Entrada (Setup)</strong></td>
+                <td>Bajo</td>
+                <td>Muy Alto (&gt; USD 50.000)</td>
+                <td><strong>Medio / Accesible (USD 1.500–3.000)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Modelo de Recurrencia</strong></td>
+                <td>No (cobran por horas)</td>
+                <td>No (proyecto único)</td>
+                <td><strong>SÍ (Retainer piso USD 1.000/mes)</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Componente Agéntico / IA</strong></td>
+                <td>Nulo o chatbot rígido</td>
+                <td>Variable</td>
+                <td><strong>AVANZADO (Multi-LLM + RAG)</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('01')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 01 Constitución</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('03')">
+          <span>Siguiente: 03 Master Project Plan</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 03: MASTER PROJECT PLAN                                       -->
+    <!-- =================================================================== -->
+    <section id="panel-03" class="tab-panel" role="tabpanel" aria-labelledby="tab-03">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 03 · WBS, Roadmap 12 Meses y Path Crítico</span>
+          <h2 class="headline-section"><strong>Master Project Plan</strong> — Hoja de Ruta Operativa y Hitos</h2>
+        </div>
+        <span class="tag">Meta Q1: 2 Clientes en 90 días</span>
+      </div>
+
+      <!-- WBS 4 Fases -->
+      <div class="kpi-grid">
+        <div class="key-tile">
+          <span class="mono-label">Fase 1 · Semanas 1–4</span>
+          <h3 class="subhead">Setup Corporativo &amp; Acuerdos</h3>
+          <p class="helper-text">Naming definitivo, dominio (.ai/.studio), Google Workspace, convenio horizontal de 3 socios, cuentas n8n/Supabase/OpenAI.</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Fase 2 · Semanas 3–6</span>
+          <h3 class="subhead">Producto &amp; Demos Sandbox</h3>
+          <p class="helper-text">Demo Pack 1 (WhatsApp + Calendar), flujo outbound Pack 2, Playbook Discovery AS-IS ➔ TO-BE y Calculadora ROI.</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Fase 3 · Semanas 5–10</span>
+          <h3 class="subhead">Prospección &amp; Conversión</h3>
+          <p class="helper-text">Nómina de 100 cuentas B2B target, campañas LinkedIn/Email por Ile, Discovery Calls y propuestas económicas con demo en vivo.</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Fase 4 · Semanas 8–52</span>
+          <h3 class="subhead">Delivery, SOPs &amp; Escala</h3>
+          <p class="helper-text">Setup Cliente #1 y #2 en &lt;10 días, librería de componentes para bajar setup a &lt;5 días y retención de retainers MRR.</p>
+        </div>
+      </div>
+
+      <!-- Path Crítico & Cadencia -->
+      <div class="asymmetric-8-4">
+        <div class="layer">
+          <span class="mono-label">Dependencias del Sistema (Path Crítico)</span>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-sm);margin-top:var(--space-md);">
+            <span class="tag">1. Naming &amp; GSuite</span>
+            <span aria-hidden="true">➔</span>
+            <span class="tag">2. MVP Demo Sandbox</span>
+            <span aria-hidden="true">➔</span>
+            <span class="tag">3. Outbound Campaigns</span>
+            <span aria-hidden="true">➔</span>
+            <span class="tag">4. Discovery AS-IS</span>
+            <span aria-hidden="true">➔</span>
+            <span class="tag tag-positive">5. Cierre &amp; Setup (&lt;10d)</span>
+          </div>
+          <p class="helper-text" style="margin-top:var(--space-md);">
+            Regla de bloqueo: no se lanzan secuencias outbound sin casillas corporativas y guion AS-IS listos; no se cierra propuesta sin demostrar el Sandbox funcional del Pack correspondiente.
+          </p>
+        </div>
+        <div class="layer">
+          <span class="mono-label">Cadencia de Control</span>
+          <ul class="rule-list" style="margin-top:var(--space-xs);">
+            <li><strong>Sync Diario (10 min async):</strong> Qué hice ayer / qué hago hoy / bloqueos.</li>
+            <li><strong>Ops Semanal (60 min):</strong> Pipeline outbound, demos y prioridades P0/P1.</li>
+            <li><strong>Directiva Mensual (90 min):</strong> MRR, margen, Churn y auditoría de riesgos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Roadmap Interactivo H1-H10 -->
+      <div>
+        <div class="section-head">
+          <div>
+            <h3 class="subhead">Cronograma de Hitos H1–H10 (Año 1)</h3>
+            <p class="helper-text">Marcá los hitos completados para actualizar el avance de ejecución del Studio.</p>
+          </div>
+          <div class="subnav-row">
+            <button type="button" class="seg-btn is-active" onclick="filterMilestones('all', this)">Todos (10)</button>
+            <button type="button" class="seg-btn" onclick="filterMilestones('Q1', this)">Q1 (H1–H7)</button>
+            <button type="button" class="seg-btn" onclick="filterMilestones('Q2', this)">Q2 (H8–H9)</button>
+            <button type="button" class="seg-btn" onclick="filterMilestones('Q3', this)">Q3 (H10)</button>
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:var(--space-md);">
+          <table class="carbon-table">
+            <thead>
+              <tr>
+                <th>Listo</th>
+                <th>Hito</th>
+                <th>Entregable Clave</th>
+                <th>Plazo</th>
+                <th>Responsable</th>
+                <th>Criterio de Aceptación</th>
+              </tr>
+            </thead>
+            <tbody id="milestones-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('02')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 02 Master Business Plan</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('04')">
+          <span>Siguiente: 04 Product &amp; Technology</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 04: PRODUCT & TECHNOLOGY                                      -->
+    <!-- =================================================================== -->
+    <section id="panel-04" class="tab-panel" role="tabpanel" aria-labelledby="tab-04">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 04 · Catálogo Técnico, Arquitectura y Stack Agéntico</span>
+          <h2 class="headline-section"><strong>Product &amp; Technology</strong> — Fichas de Producto y Stack Serverless</h2>
+        </div>
+        <span class="tag">80% Modular · LLM Agnostic</span>
+      </div>
+
+      <!-- Elevator Pitch -->
+      <div class="callout">
+        <span class="mono-label">Elevator Pitch Comercial (Introducción para Potenciales Clientes)</span>
+        <p class="body-copy">
+          “No vendemos software genérico ni consultoría teórica de IA. Instalamos <strong>Ecosistemas de Inteligencia Operativa y Comercial llave en mano</strong>: combinamos prospección B2B automatizada, bases de conocimiento privadas y agentes conversacionales de IA que atienden, cualifican y gestionan las ventas y la operación 24/7, generando retorno directo de inversión desde el primer mes.”
+        </p>
+      </div>
+
+      <!-- Selector Interactivo de Pack -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Inspector de Fichas Técnicas de Producto</h3>
+          <div class="subnav-row">
+            <button type="button" class="seg-btn is-active" onclick="selectPack('pack1', this)">Pack 1: Smart Sales Agent</button>
+            <button type="button" class="seg-btn" onclick="selectPack('pack2', this)">Pack 2: B2B Lead Engine</button>
+            <button type="button" class="seg-btn" onclick="selectPack('pack3', this)">Pack 3: Enterprise RAG Hub</button>
+          </div>
+        </div>
+        <div id="pack-detail-container" class="asymmetric-8-4" style="margin-top:var(--space-md);"></div>
+      </div>
+
+      <!-- Diagrama SVG de Arquitectura de 4 Capas -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Arquitectura General del Sistema (4 Capas Desacopladas)</h3>
+          <span class="mono-label">API-First · Tenant Isolation</span>
+        </div>
+        <div style="margin-top:var(--space-md);">
+          <svg class="svg-schematic" viewBox="0 0 960 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de arquitectura de 4 capas: Entrada, Orquestación, Modelos LLM y Datos Vectoriales">
+            <!-- Capa 1 -->
+            <rect x="24" y="20" width="912" height="72" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+            <rect x="24" y="20" width="4" height="72" fill="var(--data-1)"/>
+            <text x="42" y="42" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--on-surface-variant)">CAPA 1 · ENTRADA Y CANALES</text>
+            <rect x="42" y="52" width="195" height="28" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1"/>
+            <text x="139" y="70" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="var(--on-surface)">WhatsApp Business / Evolution API</text>
+            <rect x="255" y="52" width="185" height="28" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1"/>
+            <text x="347" y="70" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="var(--on-surface)">Web Chat Widget (HTML/JS)</text>
+            <rect x="458" y="52" width="215" height="28" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1"/>
+            <text x="565" y="70" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="var(--on-surface)">LinkedIn / Cold Email Outbound</text>
+            <rect x="691" y="52" width="225" height="28" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1"/>
+            <text x="803" y="70" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="var(--on-surface)">CRM Webhooks / Google Calendar</text>
+
+            <!-- Flecha 1->2 -->
+            <line x1="480" y1="92" x2="480" y2="120" stroke="var(--data-1)" stroke-width="2"/>
+            <polygon points="474,114 486,114 480,122" fill="var(--data-1)"/>
+
+            <!-- Capa 2 -->
+            <rect x="24" y="122" width="912" height="78" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+            <rect x="24" y="122" width="4" height="78" fill="var(--data-2)"/>
+            <text x="42" y="144" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--on-surface-variant)">CAPA 2 · ORQUESTACIÓN, LÓGICA AGÉNTICA Y GUARDRAILS</text>
+            <rect x="42" y="154" width="280" height="32" fill="var(--primary-container)"/>
+            <text x="182" y="175" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="var(--on-surface)">n8n (Self-hosted / Cloud) &amp; Make</text>
+            <rect x="340" y="154" width="280" height="32" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1"/>
+            <text x="480" y="175" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="var(--on-surface)">LangChain / Python Ingestion Scripts</text>
+            <rect x="638" y="154" width="278" height="32" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1"/>
+            <text x="777" y="175" text-anchor="middle" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="var(--on-surface)">LLM Router &amp; Reglas BANT / Handoff</text>
+
+            <!-- Flechas 2->3 -->
+            <line x1="250" y1="200" x2="250" y2="230" stroke="var(--data-3)" stroke-width="2"/>
+            <polygon points="244,224 256,224 250,232" fill="var(--data-3)"/>
+            <line x1="710" y1="200" x2="710" y2="230" stroke="var(--tertiary)" stroke-width="2"/>
+            <polygon points="704,224 716,224 710,232" fill="var(--tertiary)"/>
+
+            <!-- Capa 3A LLM -->
+            <rect x="24" y="232" width="444" height="106" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+            <rect x="24" y="232" width="4" height="106" fill="var(--data-3)"/>
+            <text x="42" y="254" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--on-surface-variant)">CAPA 3A · MODELOS DE LENGUAJE (LLM ROUTER)</text>
+            <text x="42" y="278" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="var(--on-surface)">OpenAI GPT-4o / GPT-4o-mini</text>
+            <text x="42" y="296" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="var(--on-surface-variant)">Clasificación rápida, baja latencia y alto volumen (&lt;5s)</text>
+            <text x="42" y="318" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="var(--on-surface)">Anthropic Claude 3.5 Sonnet · Google Gemini 1.5 Pro</text>
+
+            <!-- Capa 3B Datos -->
+            <rect x="492" y="232" width="444" height="106" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+            <rect x="492" y="232" width="4" height="106" fill="var(--tertiary)"/>
+            <text x="510" y="254" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--on-surface-variant)">CAPA 3B · DATOS, MEMORIA Y VECTOR STORE</text>
+            <text x="510" y="278" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="var(--on-surface)">Supabase (PostgreSQL + pgvector)</text>
+            <text x="510" y="296" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="var(--on-surface-variant)">Tenant Isolation estricto, búsqueda híbrida semántica + keyword</text>
+            <text x="510" y="318" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="var(--on-surface)">Qdrant · Redis (Memoria corta/larga &amp; caché de sesión)</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Roadmap técnico + Principios -->
+      <div class="split-2">
+        <div class="layer">
+          <span class="mono-label">Roadmap de Desarrollo Técnico (Año 1)</span>
+          <ul class="rule-list" style="margin-top:var(--space-sm);">
+            <li><strong>Q1 — Core Templates:</strong> MVPs Sandbox funcionales para Pack 1 y Pack 2, servidor n8n cloud y entorno Supabase base (T01–T04).</li>
+            <li><strong>Q2 — Reutilización &amp; SOPs:</strong> Librería de conectores estándar para reducir el tiempo de setup por debajo de 5 días hábiles.</li>
+            <li><strong>Q3–Q4 — Plataforma Unificada:</strong> Dashboard central de monitoreo, consumo de tokens por cuenta y métricas de ROI en tiempo real.</li>
+          </ul>
+        </div>
+        <div class="layer">
+          <span class="mono-label">Principios Innegociables de Ingeniería</span>
+          <ul class="rule-list" style="margin-top:var(--space-sm);">
+            <li><strong>Serverless &amp; Cost-Efficient:</strong> Sin servidores dedicados pesados; despliegue en la nube con webhooks por evento.</li>
+            <li><strong>Privacidad Corporativa:</strong> Vector stores privados por cliente; nunca se usan datos corporativos para reentrenar modelos públicos.</li>
+            <li><strong>Enriquecimiento Ético:</strong> Pipelines de datos B2B sobre LinkedIn Sales Navigator, Hunter.io y Apollo.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('03')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 03 Master Project Plan</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('05')">
+          <span>Siguiente: 05 Financial Model</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 05: FINANCIAL MODEL                                           -->
+    <!-- =================================================================== -->
+    <section id="panel-05" class="tab-panel" role="tabpanel" aria-labelledby="tab-05">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 05 · Presupuesto Fase 0, Unit Economics y Escenarios</span>
+          <h2 class="headline-section"><strong>Financial Model</strong> — Rentabilidad desde el Cliente #1</h2>
+        </div>
+        <span class="tag tag-positive">Break-Even: 1 Cliente Activo</span>
+      </div>
+
+      <!-- KPIs Financieros Base -->
+      <div class="kpi-grid">
+        <div class="key-tile">
+          <span class="mono-label">Setup + Retainer Mes 1</span>
+          <div class="key-value">USD 2.500</div>
+          <p class="helper-text">USD 1.500 Upfront Setup + USD 1.000 Retainer</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">COGS Mensual / Cliente</span>
+          <div class="key-value">~USD 165</div>
+          <p class="helper-text">LLM ($60–100) + Supabase ($30) + WA API ($30–50)</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Margen Bruto Recurrente</span>
+          <div class="key-value">~83%</div>
+          <p class="helper-text">USD 820–850 de margen bruto/mes por cuenta</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Payback Period</span>
+          <div class="key-value">Día 1</div>
+          <p class="helper-text">El Upfront Setup autofinancia adquisición y setup</p>
+        </div>
+      </div>
+
+      <!-- Simulador Interactivo de Unit Economics y ROI -->
+      <div class="asymmetric-4-8">
+        <div class="layer" style="border-top: var(--indicator);display:flex;flex-direction:column;gap:var(--space-md);">
+          <div>
+            <span class="mono-label">Simulador Interactivo · Unit Economics</span>
+            <h3 class="subhead" style="margin-top:var(--space-xs);">Proyectar Cartera y Margen</h3>
+          </div>
+
+          <div class="slider-group">
+            <label class="field-label" for="fin-clients-num">Clientes Activos en Retainer</label>
+            <div class="slider-pair">
+              <input type="range" id="fin-clients-range" min="1" max="25" step="1" value="15" oninput="syncClientsFromSlider(this.value)">
+              <input type="number" id="fin-clients-num" class="carbon-input" min="1" max="50" value="15" oninput="syncClientsFromNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <label class="field-label" for="fin-retainer-num">Monthly Retainer por Cliente (USD · Mín. $1.000)</label>
+            <div class="slider-pair">
+              <input type="range" id="fin-retainer-range" min="1000" max="3000" step="100" value="1000" oninput="syncRetainerFromSlider(this.value)">
+              <input type="number" id="fin-retainer-num" class="carbon-input" min="1000" max="10000" step="100" value="1000" oninput="syncRetainerFromNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <label class="field-label" for="fin-setup-num">Upfront Setup Fee Promedio (USD)</label>
+            <div class="slider-pair">
+              <input type="range" id="fin-setup-range" min="1500" max="4500" step="250" value="1500" oninput="syncSetupFromSlider(this.value)">
+              <input type="number" id="fin-setup-num" class="carbon-input" min="1500" max="15000" step="250" value="1500" oninput="syncSetupFromNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="slider-group">
+            <label class="field-label" for="fin-cogs-num">COGS Variable por Cliente/Mes (USD)</label>
+            <div class="slider-pair">
+              <input type="range" id="fin-cogs-range" min="100" max="350" step="10" value="165" oninput="syncCogsFromSlider(this.value)">
+              <input type="number" id="fin-cogs-num" class="carbon-input" min="50" max="1000" step="10" value="165" oninput="syncCogsFromNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="subnav-row">
+            <button type="button" class="seg-btn" onclick="applyFinPreset(6,1000,1500,165)">Conservador (6 cli)</button>
+            <button type="button" class="seg-btn" onclick="applyFinPreset(15,1000,1500,165)">Base Q4 (15 cli)</button>
+            <button type="button" class="seg-btn" onclick="applyFinPreset(20,1200,2000,165)">Optimista (20 cli)</button>
+          </div>
+        </div>
+
+        <!-- Resultados en vivo + Chart -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-md);">
+          <div class="kpi-grid">
+            <div class="key-tile">
+              <span class="mono-label">MRR Simulado</span>
+              <div class="key-value" id="sim-mrr">USD 15.000</div>
+              <p class="helper-text" id="sim-arr">ARR: USD 180.000/año</p>
+            </div>
+            <div class="tile">
+              <span class="mono-label">Margen Bruto Mensual</span>
+              <div class="key-value" id="sim-margin">83,5%</div>
+              <p class="helper-text" id="sim-net-op">Utilidad neta mensual (post $300 fijos): USD 12.225</p>
+            </div>
+            <div class="tile">
+              <span class="mono-label">Reparto / Co-Fundador (3x)</span>
+              <div class="key-value" id="sim-partner">USD 3.260</div>
+              <p class="helper-text">Tras descontar 20% reserva de capital de trabajo</p>
+            </div>
+          </div>
+
+          <div class="layer">
+            <div class="section-head" style="margin-bottom:var(--space-sm);">
+              <div>
+                <h3 class="subhead">Proyección de MRR Año 1 por Escenario</h3>
+                <span class="mono-label">USD / mes · Q1 a Q4 (Conservador vs. Base vs. Optimista)</span>
+              </div>
+            </div>
+            <div class="chart-box">
+              <canvas id="financialChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Presupuesto Fase 0 + Flujo Base -->
+      <div class="split-2">
+        <div>
+          <div class="section-head">
+            <h3 class="subhead">Presupuesto Inicial Fase 0 (USD 1.500)</h3>
+            <span class="mono-label">Capital asignado de arranque</span>
+          </div>
+          <div class="table-wrap" style="margin-top:var(--space-sm);">
+            <table class="carbon-table">
+              <thead>
+                <tr>
+                  <th>Categoría</th>
+                  <th>Concepto / Herramienta</th>
+                  <th>Prioridad</th>
+                  <th class="num">Costo (USD)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Infraestructura &amp; Marca</td><td>Dominio (.ai/.studio) + Google Workspace (3 casillas)</td><td><span class="tag">P0</span></td><td class="num">$150</td></tr>
+                <tr><td>Plataformas &amp; Cloud</td><td>Instancia n8n Cloud / Supabase / Sandbox</td><td><span class="tag">P0</span></td><td class="num">$100</td></tr>
+                <tr><td>APIs de IA</td><td>Fondo inicial OpenAI / Anthropic / Google Gemini</td><td><span class="tag">P0</span></td><td class="num">$250</td></tr>
+                <tr><td>Comercial &amp; Outreach</td><td>LinkedIn Sales Navigator, Hunter.io / Apollo</td><td><span class="tag tag-neutral">P1</span></td><td class="num">$400</td></tr>
+                <tr><td>Legales &amp; Proxy</td><td>Gastos bancarios / Certificaciones / Contratos base</td><td><span class="tag tag-neutral">P1</span></td><td class="num">$350</td></tr>
+                <tr><td>Reserva Operativa</td><td>Imprevistos y fluctuaciones de consumo de APIs</td><td><span class="tag">P0</span></td><td class="num">$250</td></tr>
+                <tr><td colspan="3"><strong>TOTAL CAPITAL FASE 0</strong></td><td class="num"><strong>$1.500</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-head">
+            <h3 class="subhead">Escenario Base Año 1 y Sensibilidad</h3>
+            <span class="mono-label">Break-even operativo con 1 cliente ($250–$350 fijos/mes)</span>
+          </div>
+          <div class="table-wrap" style="margin-top:var(--space-sm);">
+            <table class="carbon-table">
+              <thead>
+                <tr>
+                  <th>Trimestre</th>
+                  <th class="num">Clientes Activos</th>
+                  <th class="num">MRR Recurrente</th>
+                  <th class="num">Cash Flow Acum.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Q1 (Mes 1–3)</strong> · Break-even</td><td class="num">2</td><td class="num">USD 2.000 / mes</td><td class="num">USD 3.500</td></tr>
+                <tr><td><strong>Q2 (Mes 4–6)</strong> · Operación Estable</td><td class="num">5</td><td class="num">USD 5.000 / mes</td><td class="num">USD 14.000</td></tr>
+                <tr><td><strong>Q3 (Mes 7–9)</strong> · Escalamiento</td><td class="num">10</td><td class="num">USD 10.000 / mes</td><td class="num">USD 38.000</td></tr>
+                <tr><td><strong>Q4 (Mes 10–12)</strong> · Consolidación</td><td class="num">15</td><td class="num">USD 15.000 / mes</td><td class="num">USD 75.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout" style="margin-top:var(--space-sm);">
+            <span class="mono-label">Análisis de Sensibilidad</span>
+            <p class="helper-text" style="color:var(--on-surface);">
+              <strong>Conservador (50% conversión):</strong> 1 cliente cada 2 meses ➔ 6 clientes al Mes 12 (<strong>USD 6.000 MRR</strong>).<br>
+              <strong>Optimista (Alianzas Q3):</strong> 2 clientes/mes desde Mes 4 ➔ 20 clientes (<strong>USD 20.000 MRR</strong>), activando soporte de Chochi.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('04')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 04 Product &amp; Technology</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('06')">
+          <span>Siguiente: 06 Sales &amp; Marketing Playbook</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 06: SALES & MARKETING PLAYBOOK                                -->
+    <!-- =================================================================== -->
+    <section id="panel-06" class="tab-panel" role="tabpanel" aria-labelledby="tab-06">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 06 · Embudo Consultivo, Scripts y Toolkit Comercial</span>
+          <h2 class="headline-section"><strong>Sales &amp; Marketing Playbook</strong> — Venta Consultiva AS-IS ➔ TO-BE</h2>
+        </div>
+        <span class="tag">Liderazgo Externo: Ile &amp; Felipe (Marca Proxy)</span>
+      </div>
+
+      <!-- KPIs Comerciales -->
+      <div class="kpi-grid">
+        <div class="key-tile">
+          <span class="mono-label">Outreach Semanal</span>
+          <div class="key-value">100 cuentas</div>
+          <p class="helper-text">LinkedIn + Cold Email (Ile)</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Reply Rate Objetivo</span>
+          <div class="key-value">&gt; 15%</div>
+          <p class="helper-text">5–8 Discovery Calls / semana</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Demos &amp; Win Rate</span>
+          <div class="key-value">&gt; 25%</div>
+          <p class="helper-text">3–5 Demos Sandbox / semana</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Ritmo Q1</span>
+          <div class="key-value">2 clientes/mes</div>
+          <p class="helper-text">+USD 2.000 MRR piso incorporado</p>
+        </div>
+      </div>
+
+      <!-- Embudo de 4 Etapas Interactivo -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Playbook del Embudo Comercial de 4 Etapas</h3>
+          <div class="subnav-row">
+            <button type="button" class="seg-btn is-active" onclick="selectSalesStage('1', this)">1. Outbound (Ile)</button>
+            <button type="button" class="seg-btn" onclick="selectSalesStage('2', this)">2. Discovery AS-IS</button>
+            <button type="button" class="seg-btn" onclick="selectSalesStage('3', this)">3. Demo &amp; TO-BE</button>
+            <button type="button" class="seg-btn" onclick="selectSalesStage('4', this)">4. Cierre &amp; Setup</button>
+          </div>
+        </div>
+        <div id="sales-stage-detail" class="layer" style="margin-top:var(--space-md);"></div>
+      </div>
+
+      <!-- Pitch Deck de 6 Slides + Calculadora de ROI para Cliente -->
+      <div class="asymmetric-8-4">
+        <div class="layer">
+          <div class="section-head" style="margin-bottom:var(--space-md);">
+            <h3 class="subhead">Estructura del Pitch Deck Comercial (6 Slides)</h3>
+            <span class="mono-label">Toolkit Comercial</span>
+          </div>
+          <div class="card-grid">
+            <div class="layer"><span class="mono-label">Slide 01 · Carátula</span><p class="helper-text" style="color:var(--on-surface);">[Marca Proxy] — AI Growth &amp; Automation Studio B2B.</p></div>
+            <div class="layer"><span class="mono-label">Slide 02 · El Problema (AS-IS)</span><p class="helper-text" style="color:var(--on-surface);">Fuga de leads, demora &gt;15 min y 70% tiempo perdido en tareas manuales.</p></div>
+            <div class="layer"><span class="mono-label">Slide 03 · La Solución (TO-BE)</span><p class="helper-text" style="color:var(--on-surface);">Ecosistema de agentes IA integrados a WhatsApp, CRM y calendarios.</p></div>
+            <div class="layer"><span class="mono-label">Slide 04 · Catálogo de Packs</span><p class="helper-text" style="color:var(--on-surface);">Fichas ejecutivas de Pack 1, Pack 2 y Pack 3 con SLA.</p></div>
+            <div class="layer"><span class="mono-label">Slide 05 · Business Case &amp; ROI</span><p class="helper-text" style="color:var(--on-surface);">Retorno financiero estimado por ventas extra y ahorro operativo.</p></div>
+            <div class="layer"><span class="mono-label">Slide 06 · Propuesta &amp; Setup</span><p class="helper-text" style="color:var(--on-surface);">Setup Upfront + Retainer mensual y despliegue en 10 días hábiles.</p></div>
+          </div>
+        </div>
+
+        <!-- Calculadora rápida de ROI para Discovery Call -->
+        <div class="layer" style="border-top: var(--indicator);">
+          <span class="mono-label">Calculadora ROI de Discovery (AS-IS)</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);">Simulador para Propuesta Cliente</h3>
+          <div style="display:flex;flex-direction:column;gap:var(--space-sm);margin-top:var(--space-sm);">
+            <div>
+              <label class="field-label" for="roi-hours">Horas administrativas ahorradas/mes</label>
+              <input type="number" id="roi-hours" class="carbon-input" value="80" min="0" oninput="calcClientRoi()">
+            </div>
+            <div>
+              <label class="field-label" for="roi-hour-cost">Costo hora equipo comercial/admin (USD)</label>
+              <input type="number" id="roi-hour-cost" class="carbon-input" value="15" min="1" oninput="calcClientRoi()">
+            </div>
+            <div>
+              <label class="field-label" for="roi-extra-deals">Ventas adicionales recuperadas/mes</label>
+              <input type="number" id="roi-extra-deals" class="carbon-input" value="2" min="0" oninput="calcClientRoi()">
+            </div>
+            <div>
+              <label class="field-label" for="roi-deal-val">Ticket promedio por venta (USD)</label>
+              <input type="number" id="roi-deal-val" class="carbon-input" value="1200" min="0" oninput="calcClientRoi()">
+            </div>
+          </div>
+          <div class="callout is-positive" style="margin-top:var(--space-md);">
+            <span class="mono-label">Valor Mensual Generado vs. Retainer USD 1.000</span>
+            <div class="key-value" id="roi-output-value" style="font-size:1.5rem;">USD 3.600 / mes</div>
+            <p class="helper-text" id="roi-output-ratio">ROI Mensual Recurrente: 3,6x sobre el Retainer (Mes 1 vs $2.500: 1,44x)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('05')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 05 Financial Model</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('07')">
+          <span>Siguiente: 07 Operations Manual</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 07: OPERATIONS MANUAL                                         -->
+    <!-- =================================================================== -->
+    <section id="panel-07" class="tab-panel" role="tabpanel" aria-labelledby="tab-07">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 07 · Onboarding de 10 Días, SOPs y Customer Success</span>
+          <h2 class="headline-section"><strong>Operations Manual</strong> — Delivery Estandarizado y Retención</h2>
+        </div>
+        <span class="tag tag-positive">Meta Retención &gt; 90%</span>
+      </div>
+
+      <!-- Workflow 10 días -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Workflow de Onboarding e Implementación (10 Días Hábiles)</h3>
+          <span class="mono-label">80% Reutilización · Scope Lock obligatorio</span>
+        </div>
+        <div class="kpi-grid" style="margin-top:var(--space-md);">
+          <div class="key-tile">
+            <span class="mono-label">Días 1–2 · Ile + Felipe</span>
+            <h4 class="subhead">Kickoff &amp; Relevamiento</h4>
+            <p class="helper-text">Envío de Onboarding Checklist (WhatsApp API, CRM, calendarios, docs). Kickoff de 30 min para validar el TO-BE y ejecutar <strong>Scope Lock</strong>.</p>
+          </div>
+          <div class="tile">
+            <span class="mono-label">Días 3–5 · Felipe</span>
+            <h4 class="subhead">Configuración Core</h4>
+            <p class="helper-text">Duplicación de plantilla en n8n/Supabase, ajuste de System Prompts, tono de voz, reglas BANT, guardrails e ingestión RAG en pgvector.</p>
+          </div>
+          <div class="tile">
+            <span class="mono-label">Días 6–8 · Felipe + Chochi</span>
+            <h4 class="subhead">Integraciones &amp; QA</h4>
+            <p class="helper-text">Conexión de webhooks con CRM, WhatsApp API y Calendar. Pruebas de objeciones, intentos de jailbreak, fallos de red y latencia.</p>
+          </div>
+          <div class="tile">
+            <span class="mono-label">Días 9–10 · Ile + Felipe</span>
+            <h4 class="subhead">Go-Live &amp; Capacitación</h4>
+            <p class="helper-text">Sesión de 45 min al equipo del cliente para gestionar alertas de handoff humano, paso oficial a producción y cierre de hitos.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOP-01 & SOP-02 -->
+      <div class="split-2">
+        <div class="layer">
+          <span class="mono-label">SOP-01 · Control de Calidad (QA) y Guardrails</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);">Seguridad, Latencia y Cero Alucinaciones</h3>
+          <ul class="rule-list" style="margin-top:var(--space-sm);">
+            <li><strong>Validación de Latencia:</strong> Tiempo de respuesta total &lt; 5 segundos en WhatsApp o Webchat.</li>
+            <li><strong>Control de Alucinaciones:</strong> Ventana restringida estrictamente al RAG o prompt de negocio. Regla obligatoria de derivación: <em>“Esa consulta requiere la validación de un especialista. Te derivo inmediatamente con el equipo comercial.”</em></li>
+            <li><strong>Tenant Isolation:</strong> Aislamiento estricto por tablas/esquemas en Supabase para impedir cualquier cruce de datos entre clientes.</li>
+          </ul>
+        </div>
+
+        <div class="layer">
+          <span class="mono-label">SOP-02 · Escalamiento de Soporte y SLAs</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);">Niveles L1 / L2 / L3 y Tiempos de Respuesta</h3>
+          <div class="table-wrap" style="margin-top:var(--space-sm);">
+            <table class="carbon-table">
+              <thead>
+                <tr>
+                  <th>Nivel / Gravedad</th>
+                  <th>Responsable</th>
+                  <th>SLA Respuesta / Resolución</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Nivel L1</strong> · Dudas y prompts</td>
+                  <td>Ile (CS)</td>
+                  <td>Atención inicial y ajustes menores</td>
+                </tr>
+                <tr>
+                  <td><strong>Nivel L2</strong> · Conectores / API</td>
+                  <td>Felipe (CTO)</td>
+                  <td>Corrección de flujos n8n o CRM</td>
+                </tr>
+                <tr>
+                  <td><strong>Gravedad Alta</strong> · Agente caído</td>
+                  <td>L2 / L3 Team</td>
+                  <td><strong>Resp &lt; 1h · Res &lt; 4h hábiles</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Gravedad Media</strong> · Fallo parcial</td>
+                  <td>Felipe</td>
+                  <td>Resp &lt; 4h · Res &lt; 24h hábiles</td>
+                </tr>
+                <tr>
+                  <td><strong>Gravedad Baja</strong> · Cambio texto</td>
+                  <td>Ile / Felipe</td>
+                  <td>Ciclo de mantenimiento semanal</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Success -->
+      <div class="callout is-positive">
+        <span class="mono-label" style="color:var(--tertiary);">Estrategia de Customer Success &amp; Retención de Abonos (MRR)</span>
+        <p class="body-copy">
+          Para proteger el cobro continuo del Retainer (piso USD 1.000/mes), el equipo envía un <strong>Reporte Automatizado Semanal/Mensual de Impacto</strong> (conversaciones atendidas 24/7, leads calificados, reuniones agendadas y horas-hombre ahorradas) complementado con un <strong>Sync Mensual de CS de 20 min (Ile)</strong> para ajustar objeciones y detectar oportunidades de upselling a otros Packs.
+        </p>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('06')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 06 Sales &amp; Marketing Playbook</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('08')">
+          <span>Siguiente: 08 People &amp; Governance</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 08: PEOPLE & GOVERNANCE                                       -->
+    <!-- =================================================================== -->
+    <section id="panel-08" class="tab-panel" role="tabpanel" aria-labelledby="tab-08">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 08 · Asamblea de Socios, RACI y Distribución de Utilidades</span>
+          <h2 class="headline-section"><strong>People &amp; Governance</strong> — Co-Fundación Horizontal y Consenso</h2>
+        </div>
+        <span class="tag">3 Co-Fundadores Iguales</span>
+      </div>
+
+      <!-- Matriz RACI con filtro por rol -->
+      <div>
+        <div class="section-head">
+          <div>
+            <h3 class="subhead">Matriz Amplia de Responsabilidades (RACI)</h3>
+            <p class="helper-text">R: Responsible (Ejecuta) · A: Accountable (Responde) · C: Consulted · I: Informed. Filtrá por miembro para ver su carga.</p>
+          </div>
+          <div class="subnav-row">
+            <button type="button" class="seg-btn is-active" onclick="filterRaci('all', this)">Todos</button>
+            <button type="button" class="seg-btn" onclick="filterRaci('strategy', this)">Co-Fundador Strategy</button>
+            <button type="button" class="seg-btn" onclick="filterRaci('felipe', this)">Felipe (CTO)</button>
+            <button type="button" class="seg-btn" onclick="filterRaci('ile', this)">Ile (Commercial/CS)</button>
+            <button type="button" class="seg-btn" onclick="filterRaci('chochi', this)">Chochi (Dev)</button>
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:var(--space-md);">
+          <table class="carbon-table" id="raci-table">
+            <thead>
+              <tr>
+                <th>Área / Entregable Clave</th>
+                <th class="raci-col-strategy">Strategy &amp; Ops</th>
+                <th class="raci-col-felipe">Felipe (CTO)</th>
+                <th class="raci-col-ile">Ile (Commercial/CS)</th>
+                <th class="raci-col-chochi">Chochi (On-Demand)</th>
+              </tr>
+            </thead>
+            <tbody id="raci-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Cascada de Utilidades + Protocolo Deadlock -->
+      <div class="split-2">
+        <div class="layer">
+          <span class="mono-label">Acuerdos Patrimoniales y Cascada de Cash Flow</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);">Esquema de Retiro de Fondos</h3>
+          <ul class="rule-list" style="margin-top:var(--space-sm);">
+            <li><strong>Equity:</strong> Distribución equitativa entre los 3 Co-Fundadores, sujeta a permanencia e hitos. Chochi opera sin equity inicial (imputado como COGS por hora/proyecto).</li>
+            <li><strong>Prioridad 1 — Op-Costs:</strong> Cubrir infraestructura cloud (n8n, Supabase, APIs), tooling comercial y gastos proxy.</li>
+            <li><strong>Prioridad 2 — Fondo de Reserva:</strong> Retención del <strong>20% de las utilidades netas</strong> hasta acumular 3 meses de costos operativos.</li>
+            <li><strong>Prioridad 3 — Distribución:</strong> Remanente liquidado mensualmente en partes iguales entre los 3 Co-Fundadores.</li>
+          </ul>
+        </div>
+
+        <div class="layer" style="border-top: var(--indicator);">
+          <span class="mono-label">Gobierno y Resolución de Conflictos</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);">Votación y Mecanismo Anti-Deadlock</h3>
+          <ul class="rule-list" style="margin-top:var(--space-sm);">
+            <li><strong>Autonomía Ordinaria:</strong> Cada Co-Fundador decide con total autonomía dentro de su dominio RACI.</li>
+            <li><strong>Consenso Unánime:</strong> Obligatorio para cambios estructurales, socios, pricing o inversiones <strong>&gt; USD 500</strong>.</li>
+            <li><strong>Desempate en 3 Pasos:</strong> 1) Enfriamiento de 48 horas con datos objetivos ➔ 2) Evaluación bajo la pregunta North Star ➔ 3) Rechazo automático si rompe Unit Economics o el piso de USD 1.000 MRR.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('07')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 07 Operations Manual</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('09')">
+          <span>Siguiente: 09 Decision &amp; Risk Log</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 09: DECISION & RISK LOG                                       -->
+    <!-- =================================================================== -->
+    <section id="panel-09" class="tab-panel" role="tabpanel" aria-labelledby="tab-09">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 09 · Bitácora Oficial de Decisiones y Matriz de Riesgos</span>
+          <h2 class="headline-section"><strong>Decision &amp; Risk Log</strong> — Trazabilidad y Contingencias</h2>
+        </div>
+        <span class="tag">8 Decisiones D01–D08 · 8 Riesgos R01–R08</span>
+      </div>
+
+      <!-- Decision Log -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Registro Histórico de Decisiones Estratégicas (D01–D08)</h3>
+          <span class="mono-label">Noviembre 2026 · Todas aprobadas</span>
+        </div>
+        <div class="table-wrap" style="margin-top:var(--space-md);">
+          <table class="carbon-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Categoría</th>
+                <th>Decisión Adoptada</th>
+                <th>Fundamento Estratégico</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="decisions-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Matriz Visual 3x3 + Inspector de Riesgos -->
+      <div class="asymmetric-4-8">
+        <div class="layer">
+          <span class="mono-label">Mapa de Calor (Impacto vs. Probabilidad)</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);margin-bottom:var(--space-md);">Seleccioná un riesgo para inspeccionar</h3>
+          <div class="heatmap-grid">
+            <div class="hm-head">Imp \ Prob</div>
+            <div class="hm-head">Baja</div>
+            <div class="hm-head">Media</div>
+            <div class="hm-head">Alta</div>
+
+            <div class="hm-axis">Alto</div>
+            <div class="hm-cell hm-med">
+              <button type="button" class="hm-pill" data-risk="R07" onclick="selectRisk('R07')">R07</button>
+              <button type="button" class="hm-pill" data-risk="R08" onclick="selectRisk('R08')">R08</button>
+            </div>
+            <div class="hm-cell hm-high">
+              <button type="button" class="hm-pill" data-risk="R01" onclick="selectRisk('R01')">R01</button>
+              <button type="button" class="hm-pill" data-risk="R06" onclick="selectRisk('R06')">R06</button>
+            </div>
+            <div class="hm-cell hm-high">
+              <button type="button" class="hm-pill is-active" data-risk="R03" onclick="selectRisk('R03')">R03</button>
+              <button type="button" class="hm-pill" data-risk="R05" onclick="selectRisk('R05')">R05</button>
+            </div>
+
+            <div class="hm-axis">Medio</div>
+            <div class="hm-cell"><span class="helper-text">—</span></div>
+            <div class="hm-cell hm-med">
+              <button type="button" class="hm-pill" data-risk="R02" onclick="selectRisk('R02')">R02</button>
+              <button type="button" class="hm-pill" data-risk="R04" onclick="selectRisk('R04')">R04</button>
+            </div>
+            <div class="hm-cell"><span class="helper-text">—</span></div>
+
+            <div class="hm-axis">Bajo</div>
+            <div class="hm-cell"><span class="helper-text">—</span></div>
+            <div class="hm-cell"><span class="helper-text">—</span></div>
+            <div class="hm-cell"><span class="helper-text">—</span></div>
+          </div>
+
+          <div id="risk-inspector" class="callout is-error" style="margin-top:var(--space-md);"></div>
+        </div>
+
+        <div>
+          <div class="section-head" style="margin-bottom:var(--space-md);">
+            <h3 class="subhead">Registro Completo de Riesgos (R01–R08)</h3>
+            <div class="subnav-row">
+              <button type="button" class="seg-btn is-active" onclick="filterRisks('all', this)">Todos (8)</button>
+              <button type="button" class="seg-btn" onclick="filterRisks('ALTO', this)">Nivel Alto (6)</button>
+              <button type="button" class="seg-btn" onclick="filterRisks('MEDIO', this)">Nivel Medio (2)</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="carbon-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Riesgo</th>
+                  <th>P / I</th>
+                  <th>Nivel</th>
+                  <th>Mitigación Proactiva</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody id="risks-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('08')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 08 People &amp; Governance</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('10')">
+          <span>Siguiente: 10 Executive Dashboard</span>
+          <i data-lucide="arrow-right" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PANEL 10: EXECUTIVE DASHBOARD                                       -->
+    <!-- =================================================================== -->
+    <section id="panel-10" class="tab-panel" role="tabpanel" aria-labelledby="tab-10">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Chat 10 · Panel de Control de KPIs, Alertas Rojas y Ejecución</span>
+          <h2 class="headline-section"><strong>Executive Dashboard</strong> — Gobernanza de Resultados Año 1</h2>
+        </div>
+        <span class="tag tag-positive">Meta Q4: USD 15.000 MRR</span>
+      </div>
+
+      <!-- Top KPIs -->
+      <div class="kpi-grid">
+        <div class="key-tile">
+          <span class="mono-label">Clientes Q1 ➔ Q4</span>
+          <div class="key-value">2 ➔ 15</div>
+          <p class="helper-text">Break-even en Cliente #1 (Q1)</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">MRR Q1 ➔ Q4</span>
+          <div class="key-value">$2k ➔ $15k</div>
+          <p class="helper-text">ARR proyectado al cierre: USD 180.000</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Setup Time Meta</span>
+          <div class="key-value">&lt; 10 ➔ &lt; 5d</div>
+          <p class="helper-text">Hábiles con &gt;80% reutilización agéntica</p>
+        </div>
+        <div class="tile">
+          <span class="mono-label">Retención / Churn</span>
+          <div class="key-value">&gt; 90% / &lt; 5%</div>
+          <p class="helper-text">SLA Compliance &gt; 98%</p>
+        </div>
+      </div>
+
+      <!-- Chart + Simulador de Alertas Rojas -->
+      <div class="asymmetric-8-4">
+        <div class="layer">
+          <div class="section-head" style="margin-bottom:var(--space-sm);">
+            <div>
+              <h3 class="subhead">Trayectoria de Metas Trimestrales (Año 1)</h3>
+              <span class="mono-label">MRR Consolidado (USD) y Clientes Activos en Abono</span>
+            </div>
+          </div>
+          <div class="chart-box">
+            <canvas id="execChart"></canvas>
+          </div>
+        </div>
+
+        <div class="layer" style="border-top: var(--alert-bar-error);">
+          <span class="mono-label">Monitor de Alertas Rojas (Simulador)</span>
+          <h3 class="subhead" style="margin-top:var(--space-xs);">Telemetría y Contingencias</h3>
+          <div style="display:flex;flex-direction:column;gap:var(--space-sm);margin-top:var(--space-sm);">
+            <div>
+              <label class="field-label" for="alert-reply">Reply Rate Outbound (%)</label>
+              <input type="number" id="alert-reply" class="carbon-input" value="16" min="0" max="100" oninput="evaluateAlerts()">
+            </div>
+            <div>
+              <label class="field-label" for="alert-setup">Setup Time Promedio (días hábiles)</label>
+              <input type="number" id="alert-setup" class="carbon-input" value="8" min="1" max="30" oninput="evaluateAlerts()">
+            </div>
+            <div>
+              <label class="field-label" for="alert-churn">Cancelaciones tempranas Q1/Q2</label>
+              <input type="number" id="alert-churn" class="carbon-input" value="0" min="0" max="10" oninput="evaluateAlerts()">
+            </div>
+          </div>
+          <div id="alerts-output" style="margin-top:var(--space-md);display:flex;flex-direction:column;gap:var(--space-xs);"></div>
+        </div>
+      </div>
+
+      <!-- Matriz Trimestral Q1-Q4 -->
+      <div>
+        <div class="section-head">
+          <h3 class="subhead">Matriz de Seguimiento por Trimestre (Año 1)</h3>
+          <span class="mono-label">Objetivos por dueño de dominio</span>
+        </div>
+        <div class="table-wrap" style="margin-top:var(--space-sm);">
+          <table class="carbon-table">
+            <thead>
+              <tr>
+                <th>Métrica / KPI</th>
+                <th class="num">Q1 (M1–3)</th>
+                <th class="num">Q2 (M4–6)</th>
+                <th class="num">Q3 (M7–9)</th>
+                <th class="num">Q4 (M10–12)</th>
+                <th>Responsable</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Clientes Activos en Abono</strong></td><td class="num">2</td><td class="num">5</td><td class="num">10</td><td class="num">15</td><td>Ile (Commercial / CS)</td></tr>
+              <tr><td><strong>MRR Recurrente Consolidado</strong></td><td class="num">USD 2.000</td><td class="num">USD 5.000</td><td class="num">USD 10.000</td><td class="num">USD 15.000</td><td>Co-Fundador Strategy</td></tr>
+              <tr><td><strong>Ingreso Promedio Setup</strong></td><td class="num">USD 1.500</td><td class="num">USD 1.500</td><td class="num">USD 2.000</td><td class="num">USD 2.000</td><td>Ile (Commercial)</td></tr>
+              <tr><td><strong>Margen Bruto Recurrente</strong></td><td class="num">&gt; 80%</td><td class="num">&gt; 83%</td><td class="num">&gt; 85%</td><td class="num">&gt; 85%</td><td>Strategy / Tech</td></tr>
+              <tr><td><strong>Setup Time Promedio</strong></td><td class="num">&lt; 10 días</td><td class="num">&lt; 7 días</td><td class="num">&lt; 5 días</td><td class="num">&lt; 5 días</td><td>Felipe (CTO)</td></tr>
+              <tr><td><strong>Retainer Renewal Rate</strong></td><td class="num">100%</td><td class="num">&gt; 90%</td><td class="num">&gt; 92%</td><td class="num">&gt; 95%</td><td>Ile (CS)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Checklist Maestro de Acciones P0 / P1 -->
+      <div class="layer">
+        <div class="section-head">
+          <div>
+            <h3 class="subhead">Checklist Maestro de Acciones Inmediatas (P0 / P1)</h3>
+            <p class="helper-text">Consolidado operativo de los 10 módulos. El progreso se guarda automáticamente.</p>
+          </div>
+          <div class="subnav-row">
+            <button type="button" class="seg-btn is-active" onclick="filterActions('all', this)">Todas</button>
+            <button type="button" class="seg-btn" onclick="filterActions('P0', this)">Solo P0</button>
+            <button type="button" class="seg-btn" onclick="filterActions('P1', this)">Solo P1</button>
+          </div>
+        </div>
+        <div id="master-checklist" style="margin-top:var(--space-md);"></div>
+      </div>
+
+      <div class="panel-footer-nav">
+        <button type="button" class="btn btn-secondary" onclick="activateTab('09')">
+          <i data-lucide="arrow-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+          <span>Anterior: 09 Decision &amp; Risk Log</span>
+        </button>
+        <button type="button" class="btn btn-primary" onclick="activateTab('01')">
+          <span>Volver al Inicio: 01 Constitución</span>
+          <i data-lucide="corner-up-left" aria-hidden="true" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <footer style="border-top:var(--rule);padding-top:var(--space-md);display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--space-sm);">
+      <span class="helper-text">Fuentes integradas: Módulos 01–10 del Master Plan del Studio B2B, Catálogo de Packs y Matriz de Naming (Noviembre 2026).</span>
+      <span class="mono-label">AI Growth &amp; Automation Studio B2B · Marca Proxy</span>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    /* =====================================================================
+       DATOS MAESTROS EXTRAÍDOS DE LOS 10 MÓDULOS Y FUENTES DEL PROYECTO
+    ===================================================================== */
+    const NAMING_OPTIONS = [
+      { id: `agentyx`, name: `Agentyx / Agentyx Studio`, cat: `agentic`, pitch: `Agentyx — Enterprise AI & Growth Studio (arquitectura agéntica directa)`, domains: `agentyx.ai / agentyx.studio` },
+      { id: `yieldic`, name: `Yieldic / Yieldic AI`, cat: `growth`, pitch: `Yieldic — Autonomous Growth Systems (enfoque en ROI y rendimiento financiero)`, domains: `yieldic.co / yieldic.ai` },
+      { id: `syntro`, name: `Syntro Studio / Systems`, cat: `agentic`, pitch: `Syntro — Agentic AI & Digital Infrastructure (sinergia e integración en backoffice)`, domains: `syntro.studio / syntro.ai` },
+      { id: `vortexa`, name: `Vortexa AI / Studio`, cat: `growth`, pitch: `Vortexa — Aceleración y flujo constante de ventas y operaciones`, domains: `vortexa.ai / vortexa.studio` },
+      { id: `kinetix`, name: `Kinetix Growth / AI`, cat: `growth`, pitch: `Kinetix — AI-Powered Growth Engine (energía cinética y ejecución rápida)`, domains: `kinetix.ai / kinetix.la` },
+      { id: `vectora`, name: `Vectora AI / Vectorial`, cat: `agentic`, pitch: `Vectora — AI Infrastructure & Growth (embeddings, precisión y dirección)`, domains: `vectora.ai / vectora.studio` },
+      { id: `scaletrix`, name: `Scaletrix / Scalex Studio`, cat: `growth`, pitch: `Scalex — Enterprise AI & Sales Automation (escalar sin triplicar estructura)`, domains: `scalex.studio / scaletrix.ai` },
+      { id: `voltaic`, name: `Voltaic Studio / AI`, cat: `abstract`, pitch: `Voltaic — Autonomous AI & Web Systems (potencia y flujo continuo en ES/EN)`, domains: `voltaic.studio / voltaic.ai` },
+      { id: `nexia`, name: `NEXIA Studio / AI`, cat: `abstract`, pitch: `Nexia — AI & Digital Ecosystems (fusión de Next y Nexo de APIs)`, domains: `nexia.studio / nexia.la` },
+      { id: `auron`, name: `Auron Studio / Aurum AI`, cat: `abstract`, pitch: `Auron — AI Growth & Software Studio (solidez para tickets altos B2B)`, domains: `auron.studio / auron.ai` }
+    ];
+
+    const MILESTONES_DATA = [
+      { id: `H1`, q: `Q1`, title: `Setup Infraestructura & Naming`, deadline: `Q1 — Semana 2`, owner: `Tech / Strategy`, criteria: `Dominios (.ai/.studio) y Google Workspace activos; Naming elegido por consenso.` },
+      { id: `H2`, q: `Q1`, title: `Acuerdo Interno de Co-Fundadores`, deadline: `Q1 — Semana 3`, owner: `3 Co-Fundadores`, criteria: `Convenio de gobernanza horizontal firmado en igualdad de condiciones.` },
+      { id: `H3`, q: `Q1`, title: `MVP Sandbox Pack 1 & Pack 2`, deadline: `Q1 — Semana 5`, owner: `Felipe (CTO)`, criteria: `Agente conversacional 100% operable en simulador con agendamiento real.` },
+      { id: `H4`, q: `Q1`, title: `Playbook de Prospección & ROI Deck`, deadline: `Q1 — Semana 6`, owner: `Ile / Strategy`, criteria: `Script de Discovery (AS-IS ➔ TO-BE), Pitch de 6 slides y Calculadora ROI listos.` },
+      { id: `H5`, q: `Q1`, title: `Lanzamiento Outbound (100 Target Accounts)`, deadline: `Q1 — Semana 7`, owner: `Ile (Commercial)`, criteria: `100 secuencias multicanal B2B activadas en CABA/GBA.` },
+      { id: `H6`, q: `Q1`, title: `Cierre Cliente #1 (Setup + Retainer)`, deadline: `Q1 — Semana 10`, owner: `Ile / Felipe`, criteria: `Contrato firmado, Setup cobrado y Retainer piso USD 1.000/mes activado.` },
+      { id: `H7`, q: `Q1`, title: `Cierre Cliente #2 (Break-even Holgado)`, deadline: `Q1 — Semana 12`, owner: `Ile / Felipe`, criteria: `Alcanzar USD 2.000+ MRR en abonos recurrentes.` },
+      { id: `H8`, q: `Q2`, title: `SOPs de Delivery & Librería Modular`, deadline: `Q2 — Mes 5`, owner: `Felipe / Strategy`, criteria: `Reducción del tiempo de setup promedio a menos de 5 días hábiles.` },
+      { id: `H9`, q: `Q2`, title: `Consolidación de Cartera (USD 5.000 MRR)`, deadline: `Q2 — Mes 6`, owner: `Ile (Commercial)`, criteria: `5 clientes activos bajo abono mensual recurrente (>90% renovación).` },
+      { id: `H10`, q: `Q3`, title: `Programa de Alianzas & Expansión Regional`, deadline: `Q3 — Mes 9`, owner: `3 Co-Fundadores`, criteria: `Canal indirecto de partners activo y meta de USD 10.000 MRR.` }
+    ];
+
+    const PACKS_DATA = {
+      pack1: {
+        code: `PACK 01`,
+        name: `Smart Sales & Conversational Agent`,
+        target: `Pymes, empresas de servicios y firmas B2B/D2C con alto flujo de consultas en WhatsApp y Web.`,
+        pain: `Fuga de ventas por demoras >15 min fuera de horario y saturación de asesores respondiendo consultas repetitivas.`,
+        channels: [`WhatsApp Business API / Evolution / Z-API`, `Widget Web (HTML/JS)`, `Webhooks CRM + Google Calendar / Calendly / HubSpot`],
+        capabilities: [
+          `Memoria conversacional de corto y largo plazo (Redis / Supabase Vector).`,
+          `Manejo de objeciones con árboles de decisión y System Prompts parametrizados.`,
+          `Cualificación automática BANT (Presupuesto, Autoridad, Necesidad, Tiempo).`,
+          `Agendamiento autónomo directo en el calendario del equipo comercial.`
+        ],
+        kpis: [`< 5 seg tiempo de respuesta 24/7`, `+30% en agendamiento y conversión`, `80% reducción de demora inicial`, `Handoff exitoso a humano > 95%`]
+      },
+      pack2: {
+        code: `PACK 02`,
+        name: `B2B Lead Engine & Growth Pipeline`,
+        target: `Empresas B2B, consultoras corporativas, logística e industrias que cierran contratos de ticket medio-alto.`,
+        pain: `Vendedores perdiendo hasta el 70% de su jornada buscando contactos manualmente y enviando correos sin personalización.`,
+        channels: [`LinkedIn Sales Navigator`, `Cold Email Multicanal`, `Inbound Response Qualifier + Calendario`],
+        capabilities: [
+          `Data Enrichment Engine: extracción ética y enriquecimiento de decisores C-Level (Apollo / Hunter.io).`,
+          `Messaging Orchestrator: secuencias multicanal con spintax y personalización contextual por IA.`,
+          `Inbound Response Qualifier: clasifica respuestas (Interesado / Objeción / No interesado) y agenda reuniones.`
+        ],
+        kpis: [`15 a 30 reuniones calificadas/mes por ejecutivo`, `3x en tasa de respuesta positiva (Reply Rate)`, `Pipeline B2B predecible sin ampliar dotación`]
+      },
+      pack3: {
+        code: `PACK 03`,
+        name: `Enterprise Knowledge & Backoffice RAG Hub`,
+        target: `Medianas y grandes empresas, mayoristas y distribuidoras con alto volumen de manuales, catálogos o posventa.`,
+        pain: `Empleados perdiendo horas buscando en PDFs/Drive y áreas administrativas colapsadas por soporte L1/L2 repetitivo.`,
+        channels: [`Portal Web Interno / Intranet`, `ERP / CRM Connectors`, `Base Privada Supabase pgvector`],
+        capabilities: [
+          `Ingestion Pipeline: limpieza y carga automática de PDF, DOCX, CSV, Notion y Drive.`,
+          `Chunking & Embedding Engine: segmentación semántica con OpenAI text-embedding-3 / Cohere.`,
+          `Búsqueda híbrida (Keyword + Vector Semantic Search) con Tenant Isolation estricto en PostgreSQL.`
+        ],
+        kpis: [`-60% horas-hombre en soporte administrativo`, `80% solicitudes repetitivas L1/L2 automatizadas`, `Cero fuga o cruce de datos corporativos`]
+      }
+    };
+
+    const SALES_STAGES = {
+      '1': {
+        badge: `Etapa 1 · Prospección Outbound (Ile)`,
+        title: `Contacto Frío Hipersegmentado en LinkedIn y Cold Email`,
+        summary: `Objetivo: conseguir una Discovery Call de 20 minutos hablando de dinero, tiempos y eficiencia, nunca de “chatbots”.`,
+        blocks: [
+          { label: `Contacto 1 · Día 1 (Dolor + Métrica)`, text: `“Hola [Nombre], notamos que en empresas de [Rubro] los equipos comerciales pierden hasta un 40% de leads por no responder en los primeros 5 minutos fuera de horario. En nuestro studio implementamos sistemas agénticos que cualifican en tiempo real y dejan la reunión agendada. ¿Tendrías 15 minutos esta semana para ver cómo aplicaría en tu caso?”` },
+          { label: `Contacto 2 · Día 4 (Caso de Uso)`, text: `Aporte de valor concreto con métricas del Pack 1 (atención <5s) o Pack 2 (15–30 reuniones/mes).` },
+          { label: `Contacto 3 · Día 8 (Cierre de Secuencia)`, text: `Confirmación directa de ventana de agenda o cierre amable del hilo.` }
+        ]
+      },
+      '2': {
+        badge: `Etapa 2 · Discovery Call — Relevamiento AS-IS (Ile)`,
+        title: `Auditoría Cuantitativa de Fugas y Cuellos de Botella`,
+        summary: `Objetivo: levantar los datos numéricos exactos del estado AS-IS para alimentar la Calculadora de ROI antes de diseñar la propuesta TO-BE.`,
+        blocks: [
+          { label: `Pregunta 1 · Volumen y Canales`, text: `¿Cuántas consultas comerciales reciben por mes y por qué canales (WhatsApp, Web, LinkedIn)?` },
+          { label: `Pregunta 2 · Velocidad de Respuesta`, text: `¿Cuánto tiempo transcurre desde que entra una consulta hasta que un vendedor la atiende?` },
+          { label: `Pregunta 3 · Desperdicio Operativo`, text: `¿Cuántas horas al día dedica tu equipo a tareas administrativas o respondiendo las mismas preguntas frecuentes?` },
+          { label: `Pregunta 4 · Ticket Promedio`, text: `¿Cuál es el valor promedio de un cliente o contrato cerrado para tu empresa?` }
+        ]
+      },
+      '3': {
+        badge: `Etapa 3 · Demo & Propuesta TO-BE (Ile + Felipe)`,
+        title: `Sandbox Interactivo en Vivo + Caso Económico de ROI`,
+        summary: `Objetivo: exhibir la solución funcionando en vivo y demostrar matemáticamente que el Setup + Retainer se autofinancian.`,
+        blocks: [
+          { label: `1. Diagnóstico AS-IS`, text: `Resumen de las ineficiencias y fugas financieras medidas en la llamada inicial.` },
+          { label: `2. Demostración Sandbox`, text: `Simulación real del agente (Pack 1, 2 o 3) respondiendo en WhatsApp y bloqueando un turno en Calendar/CRM.` },
+          { label: `3. Propuesta Económica + ROI`, text: `Upfront Implementation Fee (USD 1.500+) + Monthly Retainer (piso USD 1.000/mes) comparado contra ahorro de horas y nuevas ventas.` }
+        ]
+      },
+      '4': {
+        badge: `Etapa 4 · Cierre, Contrato & Onboarding (Ile)`,
+        title: `Firma de Alcance Congelado (Scope Lock) y Cobro Setup`,
+        summary: `Objetivo: formalizar el acuerdo bajo Marca Proxy, cobrar el 100% del Upfront Fee y activar el Workflow de Delivery de 10 días.`,
+        blocks: [
+          { label: `Scope Lock Contractual`, text: `Se congela el alcance del estado TO-BE dentro del Pack elegido, protegiendo el ancho de banda de Felipe.` },
+          { label: `Traspaso a Operaciones`, text: `Envío inmediato del Onboarding Checklist (Días 1–2 del Manual de Operaciones).` }
+        ]
+      }
+    };
+
+    const RACI_DATA = [
+      { area: `Modelo Financiero, Pricing & Unit Economics`, strategy: `A / R`, felipe: `C`, ile: `C`, chochi: `I` },
+      { area: `Arquitectura Cloud, n8n & Supabase`, strategy: `C`, felipe: `A / R`, ile: `I`, chochi: `R` },
+      { area: `Prospección Outbound & Pipeline B2B`, strategy: `I`, felipe: `C`, ile: `A / R`, chochi: `I` },
+      { area: `Discovery Calls (Relevamiento AS-IS)`, strategy: `I`, felipe: `C`, ile: `A / R`, chochi: `I` },
+      { area: `Construcción de Demos Sandbox (Pack 1–2)`, strategy: `I`, felipe: `A / R`, ile: `C`, chochi: `R` },
+      { area: `Redacción de Propuestas TO-BE & ROI`, strategy: `A / R`, felipe: `C`, ile: `R`, chochi: `I` },
+      { area: `Onboarding & Delivery en Cliente (<10d)`, strategy: `C`, felipe: `R`, ile: `A / R`, chochi: `R` },
+      { area: `Soporte L1/L2, QA & Customer Success`, strategy: `I`, felipe: `R`, ile: `A / R`, chochi: `I` },
+      { area: `Facturación & Administración Proxy`, strategy: `A / R`, felipe: `I`, ile: `R`, chochi: `I` }
+    ];
+
+    const DECISIONS_DATA = [
+      { id: `D01`, cat: `Gobernanza`, title: `Co-Fundación en Estricta Igualdad (3 socios)`, reason: `Eliminar asperezas, cero jerarquías verticales y distribución por capacidades reales y disponibilidad.`, status: `Aprobado` },
+      { id: `D02`, cat: `Posicionamiento`, title: `AI Growth & Automation Studio B2B (AS-IS ➔ TO-BE)`, reason: `Evitar venta de tecnología vacía o consultoría teórica; vender soluciones con ROI económico medible.`, status: `Aprobado` },
+      { id: `D03`, cat: `Producto`, title: `Cero Software Custom Tradicional (Solo Packs 1–3)`, reason: `Proteger el ancho de banda técnico y garantizar entregas <10 días reutilizando 80% de bloques.`, status: `Aprobado` },
+      { id: `D04`, cat: `Operaciones`, title: `Modelo Proxy / Marca Corporativa Blanca`, reason: `Resguardar restricciones de visibilidad pública del Co-Fundador de Estrategia; Ile y Felipe cara visible.`, status: `Aprobado` },
+      { id: `D05`, cat: `Finanzas`, title: `Línea Roja: Retainer Mínimo USD 1.000/mes`, reason: `Asegurar Unit Economics saludables (>80% margen bruto) y rentabilidad recurrente desde el Cliente #1.`, status: `Aprobado` },
+      { id: `D06`, cat: `Finanzas`, title: `Estructura Híbrida (Setup Upfront + Retainer)`, reason: `Autofinanciar 100% adquisición y configuración alcanzando Payback Period en el Día 1.`, status: `Aprobado` },
+      { id: `D07`, cat: `Finanzas`, title: `Presupuesto Fase 0 acotado a USD 1.500`, reason: `Mantener estructura lean sin compromisos fijos pesados antes del Break-even en Cliente #1.`, status: `Aprobado` },
+      { id: `D08`, cat: `Equipo`, title: `Chochi como Contratista On-Demand (Sin Equity)`, reason: `Cubrir picos de demanda o integraciones RAG complejas imputado como COGS sin dilución inicial.`, status: `Aprobado` }
+    ];
+
+    const RISKS_DATA = [
+      { id: `R01`, title: `Desviación a Software Custom a Medida`, prob: `Media`, imp: `Alto`, level: `ALTO`, mit: `Aplicar protocolo de rechazo innegociable de la Constitución.`, cont: `Redireccionar la necesidad del cliente hacia Packs 1–3 mediante adaptación del TO-BE.`, owner: `Strategy / Felipe` },
+      { id: `R02`, title: `Complejidad Tecnológica Innecesaria (Costos API)`, prob: `Media`, imp: `Medio`, level: `MEDIO`, mit: `Priorizar simplicidad (KISS) y usar GPT-4o-mini para clasificación previa.`, cont: `Ajustar LLM Router a modelos de menor costo y optimizar prompts/tokens.`, owner: `Felipe (CTO)` },
+      { id: `R03`, title: `Tiempos Prolongados de Cierre B2B`, prob: `Alta`, imp: `Medio`, level: `ALTO`, mit: `Demos funcionales en vivo (Sandbox) y cálculo explícito de ROI en reunión 1.`, cont: `Ofrecer hito de Setup acotado en tiempo para acelerar compromiso inicial.`, owner: `Ile (Commercial)` },
+      { id: `R04`, title: `Baja Tasa de Conversión Outbound`, prob: `Media`, imp: `Medio`, level: `MEDIO`, mit: `Pruebas A/B de copy centrado en dolores AS-IS e hiper-personalización.`, cont: `Pivotar temporalmente hacia prospección por alianzas y red directa.`, owner: `Ile (Commercial)` },
+      { id: `R05`, title: `Cuello de Botella en Setup (>10 días)`, prob: `Alta`, imp: `Alto`, level: `ALTO`, mit: `Scope Lock en Kickoff y Onboarding Checklist completo en Días 1–2.`, cont: `Activar horas on-demand de Chochi para destrabar integraciones.`, owner: `Felipe / Ile` },
+      { id: `R06`, title: `Falta de Adopción y Churn Temprano`, prob: `Media`, imp: `Alto`, level: `ALTO`, mit: `Capacitación obligatoria de 45 min y reporte semanal automatizado de ROI.`, cont: `Sync urgente de CS para reajustar prompts y flujo de respuesta.`, owner: `Ile (CS)` },
+      { id: `R07`, title: `Exposición Pública Accidental (Proxy)`, prob: `Baja`, imp: `Alto`, level: `ALTO`, mit: `Marca Proxy estricta; interacción externa 100% asumida por Ile y Felipe.`, cont: `Transferir formalmente cualquier canal o contrato a la figura corporativa.`, owner: `Co-Fundador Strategy` },
+      { id: `R08`, title: `Fuga de Datos o Alucinaciones Graves`, prob: `Baja`, imp: `Alto`, level: `ALTO`, mit: `Tenant Isolation en Supabase y guardrails estrictos de derivación humana.`, cont: `Desactivar temporalmente el módulo conversacional y derivar a soporte humano.`, owner: `Felipe (CTO)` }
+    ];
+
+    const MASTER_ACTIONS = [
+      { id: `A01`, mod: `01–03`, prio: `P0`, text: `Selección definitiva del Naming corporativo por consenso de los 3 Co-Fundadores`, owner: `3 Co-Fundadores` },
+      { id: `A02`, mod: `01–03`, prio: `P0`, text: `Adquirir dominio (.ai / .studio) y configurar Google Workspace (3 casillas)`, owner: `Tech / Strategy` },
+      { id: `G01`, mod: `08`, prio: `P0`, text: `Redactar y firmar el Convenio Interno de Co-Fundadores en igualdad`, owner: `3 Co-Fundadores` },
+      { id: `G02`, mod: `05/08`, prio: `P0`, text: `Formalizar cuenta operativa (USD 1.500) y esquema legal/tributario de cobro Proxy`, owner: `Strategy / Ile` },
+      { id: `T01`, mod: `04`, prio: `P0`, text: `Configurar servidor n8n Cloud, entorno Supabase (pgvector) y claves API LLM`, owner: `Felipe (CTO)` },
+      { id: `T02`, mod: `04`, prio: `P0`, text: `Construir flujo base Demo Sandbox Pack 1 (WhatsApp + Google Calendar)`, owner: `Felipe (CTO)` },
+      { id: `S01`, mod: `06`, prio: `P0`, text: `Armar listado inicial de 100 empresas B2B target y configurar CRM liviano`, owner: `Ile (Commercial)` },
+      { id: `S02`, mod: `06`, prio: `P0`, text: `Finalizar scripts outbound, guion Discovery AS-IS ➔ TO-BE y Pitch Deck 6 slides`, owner: `Ile / Strategy` },
+      { id: `O01`, mod: `07`, prio: `P0`, text: `Consolidar plantillas de System Prompts, Guardrails QA y Onboarding Checklist`, owner: `Strategy / Felipe / Ile` },
+      { id: `K01`, mod: `09`, prio: `P0`, text: `Integrar protocolo de Scope Lock y testear fallbacks anti-alucinaciones en Sandbox`, owner: `Felipe / Strategy` },
+      { id: `D01`, mod: `10`, prio: `P0`, text: `Configurar tablero maestro de MRR, CAC, LTV y pipeline comercial`, owner: `Strategy / Ile` },
+      { id: `T03`, mod: `04`, prio: `P1`, text: `Desarrollar pipeline de ingestión PDF y búsqueda semántica RAG básico (Pack 3)`, owner: `Felipe / Chochi` },
+      { id: `S05`, mod: `06`, prio: `P1`, text: `Ejecutar primer sprint de prospección Outbound (Test de 20 contactos)`, owner: `Ile (Commercial)` },
+      { id: `F04`, mod: `05/06`, prio: `P1`, text: `Integrar Calculadora de ROI B2B a plantilla de propuesta comercial`, owner: `Strategy / Ile` },
+      { id: `O03`, mod: `07`, prio: `P1`, text: `Configurar flujo de alertas de soporte L1/L2 y plantilla de Reporte Mensual ROI`, owner: `Felipe / Ile` },
+      { id: `G04`, mod: `08`, prio: `P1`, text: `Definir tarifario hora para contratistas on-demand (Chochi) y tablero Notion`, owner: `Felipe / Strategy` }
+    ];
+
+    const SEARCH_INDEX = [
+      { tab: `01`, label: `01 Constitución`, title: `Posicionamiento AI Growth & Automation Studio B2B`, keywords: `constitucion mision vision north star lineas rojas proxy soluciones as-is to-be` },
+      { tab: `01`, label: `01 Constitución`, title: `Explorador de Naming: Agentyx, Yieldic, Syntro, Vortexa, Kinetix, Nexia`, keywords: `naming nombre marca agentyx yieldic syntro vortexa kinetix vectora scaletrix voltaic nexia auron` },
+      { tab: `02`, label: `02 Business Plan`, title: `Vacío de Mercado, ICP B2B, Matriz Competitiva y Ecuación ROI`, keywords: `icp mercado big 4 agencias pymes b2b distribuidoras consultoras roi as-is to-be` },
+      { tab: `03`, label: `03 Project Plan`, title: `WBS 4 Fases, Path Crítico y Cronograma de Hitos H1–H10`, keywords: `wbs proyecto roadmap hitos h1 h6 h10 90 dias cadencia sync` },
+      { tab: `04`, label: `04 Product & Tech`, title: `Packs 1, 2 y 3 + Arquitectura n8n, Supabase pgvector y LLM Router`, keywords: `pack 1 pack 2 pack 3 smart sales lead engine rag hub n8n supabase pgvector openai claude gemini whatsapp` },
+      { tab: `05`, label: `05 Financial Model`, title: `Presupuesto Fase 0 ($1.500), Unit Economics ($1.000 MRR), Break-even y Escenarios`, keywords: `finanzas presupuesto 1500 retainer 1000 setup cogs 83 margen break even conservador optimista` },
+      { tab: `06`, label: `06 Sales Playbook`, title: `Embudo 4 Etapas, Scripts Outbound, Discovery Call y Pitch Deck 6 Slides`, keywords: `ventas outbound linkedin cold email discovery call sandbox pitch deck calculadora roi` },
+      { tab: `07`, label: `07 Operations`, title: `Onboarding 10 Días, Scope Lock, QA Guardrails y Soporte L1/L2/L3`, keywords: `operaciones onboarding 10 dias scope lock qa guardrails tenant isolation sla l1 l2 retencion` },
+      { tab: `08`, label: `08 Governance`, title: `3 Co-Fundadores Iguales, Chochi On-Demand, Matriz RACI y Deadlock`, keywords: `gobierno socios igualdad raci felipe ile chochi equity utilidades reserva 20 deadlock` },
+      { tab: `09`, label: `09 Decision & Risk`, title: `Decisiones D01–D08 y Matriz de Riesgos R01–R08`, keywords: `decisiones d01 d05 riesgos r01 r03 r05 r07 r08 mitigacion contingencia heatmap` },
+      { tab: `10`, label: `10 Executive Dashboard`, title: `KPIs Año 1 (Q1–Q4), Alertas Rojas y Checklist Maestro P0/P1`, keywords: `dashboard kpi mrr arr churn alertas rojas checklist p0 p1` }
+    ];
+
+    /* =====================================================================
+       ESTADO PERSISTENTE DE LA APLICACIÓN
+    ===================================================================== */
+    const DEFAULT_STATE = {
+      activeTab: `01`,
+      selectedBrand: `Marca Proxy en Definición`,
+      completedMilestones: [],
+      completedActions: [],
+      finSim: { clients: 15, retainer: 1000, setup: 1500, cogs: 165 },
+      selectedRisk: `R03`,
+      selectedPack: `pack1`,
+      selectedSalesStage: `1`
+    };
+
+    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    let currentNameFilter = `all`;
+    let currentMilestoneFilter = `all`;
+    let currentRaciFilter = `all`;
+    let currentRiskFilter = `all`;
+    let currentActionFilter = `all`;
+    let financialChartInstance = null;
+    let execChartInstance = null;
+
+    function getCssToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    async function persistState(label) {
+      const statusEl = document.getElementById(`save-status`);
+      if (statusEl && label) {
+        statusEl.textContent = label;
+      }
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          if (statusEl) statusEl.textContent = `No se pudo sincronizar estado remoto.`;
+        }
+      }
+    }
+
+    /* =====================================================================
+       NAVEGACIÓN DE PESTAÑAS (10 MÓDULOS)
+    ===================================================================== */
+    function activateTab(tabId) {
+      appState.activeTab = tabId;
+      const tabBtns = document.querySelectorAll(`.tab-btn`);
+      const panels = document.querySelectorAll(`.tab-panel`);
+
+      tabBtns.forEach(function (btn) {
+        const isTarget = btn.id === `tab-${tabId}`;
+        btn.classList.toggle(`is-active`, isTarget);
+        btn.setAttribute(`aria-selected`, isTarget ? `true` : `false`);
+      });
+
+      panels.forEach(function (panel) {
+        panel.classList.toggle(`is-active`, panel.id === `panel-${tabId}`);
+      });
+
+      if (tabId === `05`) {
+        setTimeout(renderFinancialChart, 30);
+      } else if (tabId === `10`) {
+        setTimeout(renderExecChart, 30);
+      }
+
+      persistState(`Módulo ${tabId} activo`);
+    }
+
+    /* =====================================================================
+       MÓDULO 01: NORTH STAR Y NAMING
+    ===================================================================== */
+    function evaluateNorthStar() {
+      const c1 = document.getElementById(`ns-roi`);
+      const c2 = document.getElementById(`ns-pack`);
+      const c3 = document.getElementById(`ns-price`);
+      const c4 = document.getElementById(`ns-bandwidth`);
+      const box = document.getElementById(`ns-verdict`);
+      const title = document.getElementById(`ns-verdict-title`);
+      const desc = document.getElementById(`ns-verdict-desc`);
+      if (!c1 || !c2 || !c3 || !c4 || !box || !title || !desc) return;
+
+      const checks = [c1.checked, c2.checked, c3.checked, c4.checked];
+      const passed = checks.filter(Boolean).length;
+
+      box.classList.remove(`is-positive`, `is-warning`, `is-error`);
+      if (passed === 4) {
+        box.classList.add(`is-positive`);
+        title.textContent = `APROBADO — Alineado con la North Star`;
+        desc.textContent = `La iniciativa cumple las 4 reglas constitucionales y puede avanzar a propuesta comercial.`;
+      } else if (!c3.checked || !c2.checked) {
+        box.classList.add(`is-error`);
+        title.textContent = `RECHAZADO — Rompe Línea Roja Constitucional`;
+        desc.textContent = `No se aceptan desarrollos custom tradicionales ni contratos bajo el piso de USD 1.000/mes de Retainer.`;
+      } else {
+        box.classList.add(`is-warning`);
+        title.textContent = `POSPUESTO — Requiere Ajuste de Alcance`;
+        desc.textContent = `Cumple ${passed}/4 criterios. Reencuadrar la propuesta AS-IS ➔ TO-BE antes de comprometer horas del equipo.`;
+      }
+    }
+
+    function filterNames(cat, btn) {
+      currentNameFilter = cat;
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll(`.seg-btn`).forEach(function (b) { b.classList.remove(`is-active`); });
+        btn.classList.add(`is-active`);
+      }
+      renderNamingTable();
+    }
+
+    function selectBrandName(brandName) {
+      appState.selectedBrand = brandName;
+      const badge = document.getElementById(`header-brand-badge`);
+      if (badge) badge.textContent = `Marca Seleccionada: ${brandName}`;
+      renderNamingTable();
+      persistState(`Marca candidata fijada: ${brandName}`);
+    }
+
+    function renderNamingTable() {
+      const tbody = document.getElementById(`naming-tbody`);
+      if (!tbody) return;
+      const catLabels = {
+        agentic: `Agentic & AI Power`,
+        growth: `Growth & Performance`,
+        abstract: `Neologismo Abstracto`
+      };
+      const rows = NAMING_OPTIONS.filter(function (item) {
+        return currentNameFilter === `all` || item.cat === currentNameFilter;
+      });
+      tbody.innerHTML = rows.map(function (item) {
+        const selected = appState.selectedBrand === item.name;
+        return `
+          <tr class="${selected ? `is-selected` : ``}">
+            <td><strong>${item.name}</strong></td>
+            <td><span class="tag tag-neutral">${catLabels[item.cat] || item.cat}</span></td>
+            <td>${item.pitch}</td>
+            <td style="font-family:var(--font-label);font-size:0.8125rem;">${item.domains}</td>
+            <td class="num">
+              <button type="button" class="btn ${selected ? `btn-primary` : `btn-secondary`}" style="min-height:36px;padding:4px 12px;" onclick="selectBrandName(\`${item.name}\`)">
+                ${selected ? `Seleccionada` : `Elegir`}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    /* =====================================================================
+       MÓDULO 02: AS-IS / TO-BE TOGGLE
+    ===================================================================== */
+    function toggleAsIsToBe(mode, btn) {
+      const grid = document.getElementById(`asis-tobe-grid`);
+      const asis = document.getElementById(`col-asis`);
+      const tobe = document.getElementById(`col-tobe`);
+      if (!grid || !asis || !tobe) return;
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll(`.seg-btn`).forEach(function (b) { b.classList.remove(`is-active`); });
+        btn.classList.add(`is-active`);
+      }
+      if (mode === `both`) {
+        asis.style.display = `flex`;
+        tobe.style.display = `flex`;
+        grid.style.gridTemplateColumns = ``;
+      } else if (mode === `asis`) {
+        asis.style.display = `flex`;
+        tobe.style.display = `none`;
+        grid.style.gridTemplateColumns = `1fr`;
+      } else {
+        asis.style.display = `none`;
+        tobe.style.display = `flex`;
+        grid.style.gridTemplateColumns = `1fr`;
+      }
+    }
+
+    /* =====================================================================
+       MÓDULO 03: MILESTONES H1-H10
+    ===================================================================== */
+    function filterMilestones(q, btn) {
+      currentMilestoneFilter = q;
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll(`.seg-btn`).forEach(function (b) { b.classList.remove(`is-active`); });
+        btn.classList.add(`is-active`);
+      }
+      renderMilestones();
+    }
+
+    function toggleMilestone(id) {
+      const idx = appState.completedMilestones.indexOf(id);
+      if (idx === -1) {
+        appState.completedMilestones.push(id);
+      } else {
+        appState.completedMilestones.splice(idx, 1);
+      }
+      renderMilestones();
+      persistState(`Hito ${id} actualizado`);
+    }
+
+    function renderMilestones() {
+      const tbody = document.getElementById(`milestones-tbody`);
+      if (!tbody) return;
+      const list = MILESTONES_DATA.filter(function (m) {
+        return currentMilestoneFilter === `all` || m.q === currentMilestoneFilter;
+      });
+      tbody.innerHTML = list.map(function (m) {
+        const done = appState.completedMilestones.indexOf(m.id) !== -1;
+        return `
+          <tr class="${done ? `is-selected` : ``}">
+            <td>
+              <input type="checkbox" class="check-box" aria-label="Marcar hito ${m.id}" ${done ? `checked` : ``} onchange="toggleMilestone(\`${m.id}\`)">
+            </td>
+            <td style="font-family:var(--font-label);font-weight:600;">${m.id}</td>
+            <td><strong>${m.title}</strong></td>
+            <td style="white-space:nowrap;">${m.deadline}</td>
+            <td>${m.owner}</td>
+            <td>${m.criteria}</td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    /* =====================================================================
+       MÓDULO 04: PACKS INSPECTOR
+    ===================================================================== */
+    function selectPack(packKey, btn) {
+      appState.selectedPack = packKey;
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll(`.seg-btn`).forEach(function (b) { b.classList.remove(`is-active`); });
+        btn.classList.add(`is-active`);
+      }
+      renderPackDetail();
+      persistState(`Ficha técnica ${packKey} abierta`);
+    }
+
+    function renderPackDetail() {
+      const container = document.getElementById(`pack-detail-container`);
+      if (!container) return;
+      const p = PACKS_DATA[appState.selectedPack] || PACKS_DATA.pack1;
+      container.innerHTML = `
+        <div class="layer" style="border-top: var(--indicator);display:flex;flex-direction:column;gap:var(--space-md);">
+          <div>
+            <span class="mono-label">${p.code} · Ficha Técnica y Funcional</span>
+            <h4 class="subhead" style="margin-top:var(--space-xs);">${p.name}</h4>
+            <p class="helper-text" style="color:var(--on-surface);margin-top:var(--space-xs);"><strong>Para quién es:</strong> ${p.target}</p>
+          </div>
+          <div>
+            <span class="mono-label">Capacidades y Módulos Agénticos</span>
+            <ul class="rule-list" style="margin-top:var(--space-xs);">
+              ${p.capabilities.map(function (c) { return `<li>${c}</li>`; }).join(``)}
+            </ul>
+          </div>
+          <div class="callout is-error">
+            <span class="mono-label" style="color:var(--error);">Punto de Dolor que Resuelve (AS-IS)</span>
+            <p class="helper-text" style="color:var(--on-surface);">${p.pain}</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-md);">
+          <div class="layer">
+            <span class="mono-label">Canales e Integraciones</span>
+            <ul class="rule-list" style="margin-top:var(--space-xs);">
+              ${p.channels.map(function (ch) { return `<li>${ch}</li>`; }).join(``)}
+            </ul>
+          </div>
+          <div class="key-tile">
+            <span class="mono-label">Cómo se Mide el Éxito (KPIs &amp; SLA)</span>
+            <ul class="rule-list" style="margin-top:var(--space-xs);">
+              ${p.kpis.map(function (k) { return `<li><strong>${k}</strong></li>`; }).join(``)}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    /* =====================================================================
+       MÓDULO 05: SIMULADOR FINANCIERO + CHART.JS
+    ===================================================================== */
+    function syncClientsFromSlider(val) {
+      const num = document.getElementById(`fin-clients-num`);
+      if (num) num.value = val;
+      updateFinSim();
+    }
+    function syncClientsFromNumber(val) {
+      const rng = document.getElementById(`fin-clients-range`);
+      if (rng) rng.value = val;
+      updateFinSim();
+    }
+    function syncRetainerFromSlider(val) {
+      const num = document.getElementById(`fin-retainer-num`);
+      if (num) num.value = val;
+      updateFinSim();
+    }
+    function syncRetainerFromNumber(val) {
+      const rng = document.getElementById(`fin-retainer-range`);
+      if (rng) rng.value = val;
+      updateFinSim();
+    }
+    function syncSetupFromSlider(val) {
+      const num = document.getElementById(`fin-setup-num`);
+      if (num) num.value = val;
+      updateFinSim();
+    }
+    function syncSetupFromNumber(val) {
+      const rng = document.getElementById(`fin-setup-range`);
+      if (rng) rng.value = val;
+      updateFinSim();
+    }
+    function syncCogsFromSlider(val) {
+      const num = document.getElementById(`fin-cogs-num`);
+      if (num) num.value = val;
+      updateFinSim();
+    }
+    function syncCogsFromNumber(val) {
+      const rng = document.getElementById(`fin-cogs-range`);
+      if (rng) rng.value = val;
+      updateFinSim();
+    }
+
+    function applyFinPreset(clients, retainer, setup, cogs) {
+      const cR = document.getElementById(`fin-clients-range`), cN = document.getElementById(`fin-clients-num`);
+      const rR = document.getElementById(`fin-retainer-range`), rN = document.getElementById(`fin-retainer-num`);
+      const sR = document.getElementById(`fin-setup-range`), sN = document.getElementById(`fin-setup-num`);
+      const gR = document.getElementById(`fin-cogs-range`), gN = document.getElementById(`fin-cogs-num`);
+      if (cR && cN) { cR.value = clients; cN.value = clients; }
+      if (rR && rN) { rR.value = retainer; rN.value = retainer; }
+      if (sR && sN) { sR.value = setup; sN.value = setup; }
+      if (gR && gN) { gR.value = cogs; gN.value = cogs; }
+      updateFinSim();
+    }
+
+    function updateFinSim() {
+      const cN = document.getElementById(`fin-clients-num`);
+      const rN = document.getElementById(`fin-retainer-num`);
+      const sN = document.getElementById(`fin-setup-num`);
+      const gN = document.getElementById(`fin-cogs-num`);
+      if (!cN || !rN || !sN || !gN) return;
+
+      const clients = Math.max(1, Number(cN.value) || 1);
+      const retainer = Math.max(1000, Number(rN.value) || 1000);
+      const setup = Math.max(1500, Number(sN.value) || 1500);
+      const cogs = Math.max(0, Number(gN.value) || 0);
+
+      appState.finSim = { clients: clients, retainer: retainer, setup: setup, cogs: cogs };
+
+      const mrr = clients * retainer;
+      const arr = mrr * 12;
+      const totalCogs = clients * cogs;
+      const grossProfit = mrr - totalCogs;
+      const marginPct = mrr > 0 ? ((grossProfit / mrr) * 100) : 0;
+      const fixedOpCosts = 300;
+      const netOp = Math.max(0, grossProfit - fixedOpCosts);
+      const distributable = netOp * 0.8;
+      const perPartner = distributable / 3;
+
+      const elMrr = document.getElementById(`sim-mrr`);
+      const elArr = document.getElementById(`sim-arr`);
+      const elMargin = document.getElementById(`sim-margin`);
+      const elNet = document.getElementById(`sim-net-op`);
+      const elPartner = document.getElementById(`sim-partner`);
+
+      if (elMrr) elMrr.textContent = `USD ${mrr.toLocaleString(`es-AR`)}`;
+      if (elArr) elArr.textContent = `ARR: USD ${arr.toLocaleString(`es-AR`)}/año · Setup cartera: USD ${(clients * setup).toLocaleString(`es-AR`)}`;
+      if (elMargin) elMargin.textContent = `${marginPct.toFixed(1).replace(`.`, `,`)}%`;
+      if (elNet) elNet.textContent = `Utilidad neta mensual (post $300 fijos): USD ${Math.round(netOp).toLocaleString(`es-AR`)}`;
+      if (elPartner) elPartner.textContent = `USD ${Math.round(perPartner).toLocaleString(`es-AR`)}`;
+
+      persistState(`Simulador financiero actualizado`);
+    }
+
+    function renderFinancialChart() {
+      const canvas = document.getElementById(`financialChart`);
+      if (!canvas || typeof Chart === `undefined`) return;
+      if (financialChartInstance) {
+        financialChartInstance.destroy();
+      }
+      const c1 = getCssToken(`--data-1`) || `#0f62fe`;
+      const c2 = getCssToken(`--data-3`) || `#005d5d`;
+      const cCtx = getCssToken(`--data-context`) || `#8d8d8d`;
+      const gridColor = getCssToken(`--outline-variant`) || `#e0e0e0`;
+      const textColor = getCssToken(`--on-surface-variant`) || `#525252`;
+
+      financialChartInstance = new Chart(canvas, {
+        type: `line`,
+        data: {
+          labels: [`Q1 (Mes 3)`, `Q2 (Mes 6)`, `Q3 (Mes 9)`, `Q4 (Mes 12)`],
+          datasets: [
+            {
+              label: `Escenario Base (15 cli Q4)`,
+              data: [2000, 5000, 10000, 15000],
+              borderColor: c1,
+              backgroundColor: c1,
+              borderWidth: 2,
+              tension: 0,
+              pointRadius: 4
+            },
+            {
+              label: `Escenario Optimista (Alianzas Q3 · 20 cli)`,
+              data: [2000, 8000, 14000, 20000],
+              borderColor: c2,
+              backgroundColor: c2,
+              borderWidth: 2,
+              tension: 0,
+              pointRadius: 4
+            },
+            {
+              label: `Escenario Conservador (6 cli Q4)`,
+              data: [1500, 3000, 4500, 6000],
+              borderColor: cCtx,
+              backgroundColor: cCtx,
+              borderWidth: 1.5,
+              borderDash: [5, 5],
+              tension: 0,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: `top`,
+              align: `start`,
+              labels: { color: textColor, boxWidth: 12, font: { family: `IBM Plex Mono, monospace`, size: 11 } }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: gridColor },
+              ticks: { color: textColor, font: { family: `IBM Plex Mono, monospace`, size: 11 } }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { color: gridColor },
+              ticks: {
+                color: textColor,
+                font: { family: `IBM Plex Mono, monospace`, size: 11 },
+                callback: function (v) { return `$` + Number(v).toLocaleString(`es-AR`); }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    /* =====================================================================
+       MÓDULO 06: SALES STAGE & CLIENT ROI CALCULATOR
+    ===================================================================== */
+    function selectSalesStage(stageId, btn) {
+      appState.selectedSalesStage = stageId;
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll(`.seg-btn`).forEach(function (b) { b.classList.remove(`is-active`); });
+        btn.classList.add(`is-active`);
+      }
+      renderSalesStage();
+      persistState(`Etapa comercial ${stageId} seleccionada`);
+    }
+
+    function renderSalesStage() {
+      const box = document.getElementById(`sales-stage-detail`);
+      if (!box) return;
+      const st = SALES_STAGES[appState.selectedSalesStage] || SALES_STAGES['1'];
+      box.innerHTML = `
+        <span class="mono-label">${st.badge}</span>
+        <h4 class="subhead" style="margin-top:var(--space-xs);">${st.title}</h4>
+        <p class="body-copy" style="margin-top:var(--space-xs);">${st.summary}</p>
+        <div class="card-grid" style="margin-top:var(--space-md);">
+          ${st.blocks.map(function (b) {
+            return `
+              <div class="layer">
+                <span class="mono-label">${b.label}</span>
+                <p class="helper-text" style="color:var(--on-surface);margin-top:var(--space-xs);">${b.text}</p>
+              </div>
+            `;
+          }).join(``)}
+        </div>
+      `;
+    }
+
+    function calcClientRoi() {
+      const hEl = document.getElementById(`roi-hours`);
+      const cEl = document.getElementById(`roi-hour-cost`);
+      const dEl = document.getElementById(`roi-extra-deals`);
+      const vEl = document.getElementById(`roi-deal-val`);
+      const outVal = document.getElementById(`roi-output-value`);
+      const outRatio = document.getElementById(`roi-output-ratio`);
+      if (!hEl || !cEl || !dEl || !vEl || !outVal || !outRatio) return;
+
+      const savings = (Number(hEl.value) || 0) * (Number(cEl.value) || 0);
+      const extraRev = (Number(dEl.value) || 0) * (Number(vEl.value) || 0);
+      const total = savings + extraRev;
+      const ratioRec = total / 1000;
+      const ratioM1 = total / 2500;
+
+      outVal.textContent = `USD ${total.toLocaleString(`es-AR`)} / mes`;
+      outRatio.textContent = `ROI Mensual Recurrente: ${ratioRec.toFixed(2).replace(`.`, `,`)}x sobre Retainer $1.000 (Mes 1 vs $2.500: ${ratioM1.toFixed(2).replace(`.`, `,`)}x)`;
+    }
+
+    /* =====================================================================
+       MÓDULO 08: RACI FILTER
+    ===================================================================== */
+    function filterRaci(role, btn) {
+      currentRaciFilter = role;
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll(`.seg-btn`).forEach(function (b) { b.classList.remove(`is-active`); });
+        btn.classList.add(`is-active`);
+      }
+      renderRaciTable();
+    }
+
+    function renderRaciTable() {
+      const tbody = document.getElementById(`raci-tbody`);
+      if (!tbody) return;
+      const roleCols = [`strategy`, `felipe`, `ile`, `chochi`];
+      roleCols.forEach(function (r) {
+        const th = document.querySelector(`.raci-col-${r}`);
+        if (th) {
+          th.style.display = (currentRaciFilter === `all` || currentRaciFilter === r) ? `` : `none`;
+        }
+      });
+
+      function badge(val) {
+        if (val.indexOf(`A`) !== -1) return `<span class="tag">${val}</span>`;
+        if (val === `R`) return `<span class="tag tag-positive">${val}</span>`;
+        return `<span class="tag tag-neutral">${val}</span>`;
+      }
+
+      tbody.innerHTML = RACI_DATA.map(function (row) {
+        return `
+          <tr>
+            <td><strong>${row.area}</strong></td>
+            ${(currentRaciFilter === `all` || currentRaciFilter === `strategy`) ? `<td>${badge(row.strategy)}</td>` : ``}
+            ${(currentRaciFilter === `all` || currentRaciFilter === `felipe`) ? `<td>${badge(row.felipe)}</td>` : ``}
+            ${(currentRaciFilter === `all` || currentRaciFilter === `ile`) ? `<td>${badge(row.ile)}</td>` : ``}
+            ${(currentRaciFilter === `all` || currentRaciFilter === `chochi`) ? `<td>${badge(row.chochi)}</td>` : ``}
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    /* =====================================================================
+       MÓDULO 09: DECISION LOG & RISK MATRIX
+    ===================================================================== */
+    function renderDecisions() {
+      const tbody = document.getElementById(`decisions-tbody`);
+      if (!tbody) return;
+      tbody.innerHTML = DECISIONS_DATA.map(function (d) {
+        return `
+          <tr>
+            <td style="font-family:var(--font-label);font-weight:600;">${d.id}</td>
+            <td><span class="tag tag-neutral">${d.cat}</span></td>
+            <td><strong>${d.title}</strong></td>
+            <td>${d.reason}</td>
+            <td><span class="tag tag-positive">${d.status}</span></td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    function selectRisk(riskId) {
+      appState.selectedRisk = riskId;
+      document.querySelectorAll(`.hm-pill`).forEach(function (p) {
+        p.classList.toggle(`is-active`, p.dataset.risk === riskId);
+      });
+      renderRiskInspector();
+      renderRisksTable();
+      persistState(`Riesgo ${riskId} inspeccionado`);
+    }
+
+    function filterRisks(level, btn) {
+      currentRiskFilter = level;
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll(`.seg-btn`).forEach(function (b) { b.classList.remove(`is-active`); });
+        btn.classList.add(`is-active`);
+      }
+      renderRisksTable();
+    }
+
+    function renderRiskInspector() {
+      const box = document.getElementById(`risk-inspector`);
+      if (!box) return;
+      const r = RISKS_DATA.find(function (x) { return x.id === appState.selectedRisk; }) || RISKS_DATA[2];
+      box.classList.remove(`is-error`, `is-warning`);
+      box.classList.add(r.level === `ALTO` ? `is-error` : `is-warning`);
+      box.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-sm);">
+          <span class="mono-label">${r.id} · Probabilidad ${r.prob} · Impacto ${r.imp}</span>
+          <span class="tag ${r.level === `ALTO` ? `tag-error` : `tag-warning`}">${r.level}</span>
+        </div>
+        <h4 class="subhead" style="margin-top:var(--space-xs);">${r.title}</h4>
+        <p class="helper-text" style="color:var(--on-surface);margin-top:var(--space-xs);"><strong>Mitigación Proactiva:</strong> ${r.mit}</p>
+        <p class="helper-text" style="color:var(--on-surface);"><strong>Contingencia / Reacción:</strong> ${r.cont}</p>
+        <p class="mono-label" style="margin-top:var(--space-xs);">Responsable: ${r.owner}</p>
+      `;
+    }
+
+    function renderRisksTable() {
+      const tbody = document.getElementById(`risks-tbody`);
+      if (!tbody) return;
+      const rows = RISKS_DATA.filter(function (r) {
+        return currentRiskFilter === `all` || r.level === currentRiskFilter;
+      });
+      tbody.innerHTML = rows.map(function (r) {
+        const active = r.id === appState.selectedRisk;
+        return `
+          <tr class="${active ? `is-selected` : ``}" style="cursor:pointer;" onclick="selectRisk(\`${r.id}\`)">
+            <td style="font-family:var(--font-label);font-weight:600;">${r.id}</td>
+            <td><strong>${r.title}</strong></td>
+            <td style="white-space:nowrap;">${r.prob} / ${r.imp}</td>
+            <td><span class="tag ${r.level === `ALTO` ? `tag-error` : `tag-warning`}">${r.level}</span></td>
+            <td>${r.mit}</td>
+            <td>${r.owner}</td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    /* =====================================================================
+       MÓDULO 10: EXECUTIVE DASHBOARD (CHART + ALERTAS + CHECKLIST)
+    ===================================================================== */
+    function renderExecChart() {
+      const canvas = document.getElementById(`execChart`);
+      if (!canvas || typeof Chart === `undefined`) return;
+      if (execChartInstance) {
+        execChartInstance.destroy();
+      }
+      const c1 = getCssToken(`--data-1`) || `#0f62fe`;
+      const c2 = getCssToken(`--data-2`) || `#6929c4`;
+      const gridColor = getCssToken(`--outline-variant`) || `#e0e0e0`;
+      const textColor = getCssToken(`--on-surface-variant`) || `#525252`;
+
+      execChartInstance = new Chart(canvas, {
+        type: `bar`,
+        data: {
+          labels: [`Q1 (M1–3)`, `Q2 (M4–6)`, `Q3 (M7–9)`, `Q4 (M10–12)`],
+          datasets: [
+            {
+              label: `MRR Consolidado (USD/mes)`,
+              data: [2000, 5000, 10000, 15000],
+              backgroundColor: c1,
+              yAxisID: `y`
+            },
+            {
+              label: `Clientes Activos en Abono`,
+              data: [2, 5, 10, 15],
+              type: `line`,
+              borderColor: c2,
+              backgroundColor: c2,
+              borderWidth: 2,
+              pointRadius: 5,
+              yAxisID: `y1`
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: `top`,
+              align: `start`,
+              labels: { color: textColor, boxWidth: 12, font: { family: `IBM Plex Mono, monospace`, size: 11 } }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: textColor, font: { family: `IBM Plex Mono, monospace`, size: 11 } }
+            },
+            y: {
+              position: `left`,
+              beginAtZero: true,
+              grid: { color: gridColor },
+              ticks: {
+                color: textColor,
+                font: { family: `IBM Plex Mono, monospace`, size: 11 },
+                callback: function (v) { return `$` + Number(v).toLocaleString(`es-AR`); }
+              }
+            },
+            y1: {
+              position: `right`,
+              beginAtZero: true,
+              grid: { display: false },
+              ticks: { color: textColor, font: { family: `IBM Plex Mono, monospace`, size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    function evaluateAlerts() {
+      const rEl = document.getElementById(`alert-reply`);
+      const sEl = document.getElementById(`alert-setup`);
+      const cEl = document.getElementById(`alert-churn`);
+      const out = document.getElementById(`alerts-output`);
+      if (!rEl || !sEl || !cEl || !out) return;
+
+      const reply = Number(rEl.value) || 0;
+      const setup = Number(sEl.value) || 0;
+      const churn = Number(cEl.value) || 0;
+      const alerts = [];
+
+      if (reply < 10) {
+        alerts.push({
+          title: `ALERTA 1 — Fuga de Pipeline (Reply ${reply}% < 10%)`,
+          text: `Congelar secuencias actuales y revisar copy, ICP y propuesta de ROI con Strategy + Ile.`
+        });
+      }
+      if (setup > 12) {
+        alerts.push({
+          title: `ALERTA 2 — Sobrecarga en Delivery (Setup ${setup}d > 12d)`,
+          text: `Congelar setups personalizados y activar horas on-demand de Chochi para destrabar conectores.`
+        });
+      }
+      if (churn >= 1) {
+        alerts.push({
+          title: `ALERTA 3 — Churn Temprano (${churn} baja(s) en Q1/Q2)`,
+          text: `Auditoría urgente de Customer Success (Ile) para ajustar prompts, RAG y reenviar Reporte de ROI.`
+        });
+      }
+
+      if (alerts.length === 0) {
+        out.innerHTML = `
+          <div class="callout is-positive">
+            <strong style="font-size:0.875rem;">Sin Desviaciones Críticas</strong>
+            <span class="helper-text">Métricas dentro de los umbrales de control del Executive Dashboard.</span>
+          </div>
+        `;
+      } else {
+        out.innerHTML = alerts.map(function (a) {
+          return `
+            <div class="callout is-error">
+              <strong style="font-size:0.875rem;">${a.title}</strong>
+              <span class="helper-text" style="color:var(--on-surface);">${a.text}</span>
+            </div>
+          `;
+        }).join(``);
+      }
+    }
+
+    function filterActions(prio, btn) {
+      currentActionFilter = prio;
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll(`.seg-btn`).forEach(function (b) { b.classList.remove(`is-active`); });
+        btn.classList.add(`is-active`);
+      }
+      renderMasterChecklist();
+    }
+
+    function toggleMasterAction(id) {
+      const idx = appState.completedActions.indexOf(id);
+      if (idx === -1) {
+        appState.completedActions.push(id);
+      } else {
+        appState.completedActions.splice(idx, 1);
+      }
+      renderMasterChecklist();
+      updateHeaderBadges();
+      persistState(`Acción ${id} actualizada`);
+    }
+
+    function renderMasterChecklist() {
+      const container = document.getElementById(`master-checklist`);
+      if (!container) return;
+      const items = MASTER_ACTIONS.filter(function (a) {
+        return currentActionFilter === `all` || a.prio === currentActionFilter;
+      });
+      container.innerHTML = items.map(function (a) {
+        const done = appState.completedActions.indexOf(a.id) !== -1;
+        return `
+          <div class="check-row ${done ? `is-done` : ``}">
+            <input type="checkbox" class="check-box" aria-label="Completar ${a.id}" ${done ? `checked` : ``} onchange="toggleMasterAction(\`${a.id}\`)">
+            <div>
+              <div class="check-text"><strong>${a.id}</strong> — ${a.text}</div>
+              <div class="helper-text">Módulo ${a.mod} · Responsable: ${a.owner}</div>
+            </div>
+            <span class="tag ${a.prio === `P0` ? `` : `tag-neutral`}">${a.prio}</span>
+          </div>
+        `;
+      }).join(``);
+    }
+
+    function updateHeaderBadges() {
+      const badge = document.getElementById(`header-brand-badge`);
+      if (badge) badge.textContent = appState.selectedBrand === `Marca Proxy en Definición` ? `Marca Proxy en Definición` : `Marca: ${appState.selectedBrand}`;
+      const prog = document.getElementById(`header-progress-badge`);
+      if (prog) prog.textContent = `${appState.completedActions.length} / ${MASTER_ACTIONS.length} acciones P0–P1`;
+    }
+
+    /* =====================================================================
+       BÚSQUEDA GLOBAL, EXPORTACIÓN CSV Y RESET INLINE
+    ===================================================================== */
+    function handleGlobalSearch(query) {
+      const popover = document.getElementById(`search-results`);
+      if (!popover) return;
+      const q = (query || ``).trim().toLowerCase();
+      if (q.length < 2) {
+        popover.classList.remove(`open`);
+        popover.innerHTML = ``;
+        return;
+      }
+      const matches = SEARCH_INDEX.filter(function (item) {
+        return item.title.toLowerCase().indexOf(q) !== -1 ||
+               item.keywords.toLowerCase().indexOf(q) !== -1 ||
+               item.label.toLowerCase().indexOf(q) !== -1;
+      });
+      if (matches.length === 0) {
+        popover.innerHTML = `<div class="search-hit"><span class="helper-text">Sin coincidencias para “${query}”. Probá con: Retainer, RAG, Chochi, AS-IS, R05 o n8n.</span></div>`;
+      } else {
+        popover.innerHTML = matches.map(function (m) {
+          return `
+            <button type="button" class="search-hit" onclick="jumpToSearchResult(\`${m.tab}\`)">
+              <span class="mono-label">${m.label}</span>
+              <strong>${m.title}</strong>
+            </button>
+          `;
+        }).join(``);
+      }
+      popover.classList.add(`open`);
+    }
+
+    function jumpToSearchResult(tabId) {
+      const popover = document.getElementById(`search-results`);
+      if (popover) popover.classList.remove(`open`);
+      activateTab(tabId);
+    }
+
+    function exportSummaryCsv() {
+      const lines = [
+        `Seccion,ID,Elemento,Detalle,Estado`,
+        `Marca,NAME,Marca Seleccionada,"${appState.selectedBrand}",Configurado`,
+        `Finanzas,SIM,Clientes Simulados,${appState.finSim.clients},Simulador`,
+        `Finanzas,SIM,Retainer USD,${appState.finSim.retainer},Simulador`,
+        `Finanzas,SIM,MRR Simulado USD,${appState.finSim.clients * appState.finSim.retainer},Simulador`
+      ];
+      MASTER_ACTIONS.forEach(function (a) {
+        const done = appState.completedActions.indexOf(a.id) !== -1 ? `Completada` : `Pendiente`;
+        lines.push(`Accion ${a.prio},${a.id},"${a.text}","${a.owner}",${done}`);
+      });
+      const csv = lines.join(`\n`);
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: csv,
+          contentType: `text/csv`,
+          encoding: `UTF-8`,
+          filename: `studio_ia_b2b_master_plan.csv`
+        });
+      } else {
+        const blob = new Blob([csv], { type: `text/csv;charset=utf-8;` });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement(`a`);
+        link.href = url;
+        link.download = `studio_ia_b2b_master_plan.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+      const statusEl = document.getElementById(`save-status`);
+      if (statusEl) statusEl.textContent = `CSV exportado correctamente.`;
+    }
+
+    function resetWorkspaceState(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.querySelector(`span`).textContent = `Confirmar reinicio`;
+        setTimeout(function () {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            const s = btn.querySelector(`span`);
+            if (s) s.textContent = `Reiniciar Cambios`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      const s = btn.querySelector(`span`);
+      if (s) s.textContent = `Reiniciar Cambios`;
+
+      appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      applyRestoredState();
+      persistState(`Consola reiniciada a valores base`);
+    }
+
+    function applyRestoredState() {
+      applyFinPreset(
+        appState.finSim.clients,
+        appState.finSim.retainer,
+        appState.finSim.setup,
+        appState.finSim.cogs
+      );
+      renderNamingTable();
+      renderMilestones();
+      renderPackDetail();
+      renderSalesStage();
+      calcClientRoi();
+      renderRaciTable();
+      renderDecisions();
+      selectRisk(appState.selectedRisk || `R03`);
+      evaluateAlerts();
+      renderMasterChecklist();
+      updateHeaderBadges();
+      activateTab(appState.activeTab || `01`);
+    }
+
+    /* =====================================================================
+       INICIALIZACIÓN CON SHIM API
+    ===================================================================== */
+    document.addEventListener(`click`, function (e) {
+      const wrapper = document.querySelector(`.search-wrapper`);
+      const popover = document.getElementById(`search-results`);
+      if (wrapper && popover && !wrapper.contains(e.target)) {
+        popover.classList.remove(`open`);
+      }
+    });
+
+    document.addEventListener(`keydown`, function (e) {
+      const active = document.activeElement;
+      if (active && active.classList.contains(`tab-btn`)) {
+        const tabs = Array.from(document.querySelectorAll(`.tab-btn`));
+        const idx = tabs.indexOf(active);
+        if (e.key === `ArrowRight` && idx < tabs.length - 1) {
+          tabs[idx + 1].focus();
+          tabs[idx + 1].click();
+        } else if (e.key === `ArrowLeft` && idx > 0) {
+          tabs[idx - 1].focus();
+          tabs[idx - 1].click();
+        }
+      }
+    });
+
+    async function initApp() {
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), saved);
+            if (!appState.finSim) appState.finSim = Object.assign({}, DEFAULT_STATE.finSim);
+            if (!Array.isArray(appState.completedMilestones)) appState.completedMilestones = [];
+            if (!Array.isArray(appState.completedActions)) appState.completedActions = [];
+          }
+        } catch (err) {
+          appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        }
+      }
+
+      applyRestoredState();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, function () {
+      initApp();
+    });
+  </script>
+</body>
+</html>
